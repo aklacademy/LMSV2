@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="lms.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    
+   <!-- OVERLAY & NAVBAR -->
+
+<div
+    id="sidebar-overlay"
+    class="sidebar-overlay"
+    onclick="closeSidebar()">
+</div>
+
+<div
+    id="top-navbar"
+    class="hidden">
+
+    <button
+        id="menu-toggle"
+        class="nav-btn"
+        onclick="toggleMenu()">
+
+        ☰
+
+    </button>
+
+</div>
+
+
+    <!-- ADMIN LOGIN -->
+
+    <div
+        id="admin-login-container"
+        class="login-container">
+
+        <div class="login-card">
+
+            <h1 class="login-title">
+
+                Practice
+
+            </h1>
+
+            <h2 class="login-subtitle">
+
+                ACE Mastery System™
+
+            </h2>
+
+            <p class="login-tagline">
+
+                Master the Language,
+                Shape Your Destiny
+
+            </p>
+
+            <h3 class="login-heading">
+
+                Administrator Login
+
+            </h3>
+
+            <div class="login-form">
+
+                <label class="login-label">
+
+        Username
+
+    </label>
+
+                <input
+                    type="text"
+                    id="admin-username"
+                    class="admin-input"
+                    placeholder="Enter username">
+
+                    <label class="login-label">
+
+        Password
+
+    </label>
+
+    <input
+        type="password"
+        id="admin-password"
+        class="admin-input"
+        placeholder="Enter password">
+
+        <div class="login-options">
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    onclick="toggleAdministratorPassword()">
+
+                Show Password
+
+            </label>
+
+        </div>
+
+                <button
+                    class="nav-btn"
+                    onclick="loginAdministrator()">
+
+                    Login
+
+                </button>
+                
+            </div>
+
+        </div>
+
+    </div>
+        
+
+        <!-- MAIN APP CONTAINER -->
+        <div id="admin-workspace" class="app-layout hidden">
+
+        <!-- LEFT SIDEBAR -->
+        <div class="sidebar">
+            <button id="sidebar-close-btn" onclick="toggleMenu()">✕</button>
+        
+
+            <!----CONTENT MANAGEMENT-->
+
+
+            <div>
+
+    <button
+    class="sidebar-group-btn"
+    onclick="toggleSubmenu(
+        'master-data-submenu'
+    )">
+
+    📊 Master Data
+
+</button>
+
+    <div
+        id="master-data-submenu"
+        class="hidden">
+
+        <button class="admin-sidebar-btn" onclick="openAdminPage()">Dashboard</button>
+        <button class="admin-sidebar-btn" onclick="openMasterDataPage()">View Master Data</button>
+        
+
+    </div>
+
+</div>
+
+            <div>
+
+                
+
+    <button
+    class="sidebar-group-btn"
+    onclick="toggleSubmenu(
+        'content-management-submenu'
+    )">
+
+    📚 Content Management
+
+</button>
+
+    
+
+    <div
+        id="content-management-submenu"
+        class="hidden">
+
+        
+                <!-- Courses Menu -->
+            <div>
+                <button class="admin-sidebar-btn" onclick="toggleSubmenu('courses-submenu')">Courses</button>
+                <div id="courses-submenu" class="hidden">
+                    <button class="sidebar-sub-btn" onclick="openCreateCoursePage()">Create Course</button>
+                    <button class="sidebar-sub-btn" onclick="openManageCoursesPage()">Manage Courses</button>
+                </div>
+            </div>
+
+                        <!-- Learning Areas Menu -->
+            <div>
+                <button class="admin-sidebar-btn" onclick="toggleSubmenu('learning-areas-submenu')">Learning Areas</button>
+                <div id="learning-areas-submenu" class="hidden">
+                    <button class="sidebar-sub-btn" onclick="openCreateAreaPage()">Create Area</button>
+                    <button class="sidebar-sub-btn" onclick="openManageAreasPage()">Manage Areas</button>
+                </div>
+            </div>
+
+            
+            <!-- Themes Menu -->
+            <div>
+                <button class="admin-sidebar-btn" onclick="toggleSubmenu('themes-submenu')">Themes</button>
+                <div id="themes-submenu" class="hidden">
+                    <button class="sidebar-sub-btn" onclick="openCreateThemePage()">Create Themes</button>
+                    <button class="sidebar-sub-btn" onclick="openManageThemesPage()">Manage Themes</button>
+                </div>
+            </div>
+
+            <!-- Lists Menu -->
+            <div>
+                <button class="admin-sidebar-btn" onclick="toggleSubmenu('lists-submenu')">Lists</button>
+                <div id="lists-submenu" class="hidden">
+                    <button class="sidebar-sub-btn" onclick="openCreateListPage()">Create Lists</button>
+                    <button class="sidebar-sub-btn" onclick="openManageListsPage()">Manage Lists</button>
+                </div>
+            </div>
+
+            <!-- Content Menu -->
+            <div>
+                <button class="admin-sidebar-btn" onclick="toggleSubmenu('content-submenu')">Content</button>
+                <div id="content-submenu" class="hidden">
+                    <button class="sidebar-sub-btn" onclick="openAppendContentPage()">Append Content</button>
+                    <button class="sidebar-sub-btn" onclick="openLessonManagementPage()">Lesson Management</button>
+                    <button class="sidebar-sub-btn" onclick="openEditVocabularyPage()">Edit Vocabulary
+
+</button>
+                    <button class="sidebar-sub-btn" onclick="openContentIdGrid()">View Content IDs</button>
+                </div>
+            </div>
+
+            <!-- Assessments Menu -->
+            <div>
+                <button class="admin-sidebar-btn" onclick="toggleSubmenu('admin-assessment-submenu')">Assessments</button>
+                <div id="admin-assessment-submenu" class="hidden">
+                    <button class="sidebar-sub-btn" onclick="openUploadQuestionsPage()">Upload Questions</button>
+                    <button class="sidebar-sub-btn" onclick="openManageSetsPage()">Manage Sets</button>
+                    <button class="sidebar-sub-btn" onclick="openReviewQuestionsPage()">Review Questions</button>
+                    <button class="sidebar-sub-btn" onclick="openQuestionIdGrid()"> View Question IDs</button>
+                </div>
+            </div>
+    </div>
+
+</div>
+
+<div>
+
+   <button
+    class="sidebar-group-btn"
+    onclick="toggleSubmenu(
+        'learners-management-submenu'
+    )">
+
+    👥 Learners Management
+
+</button>
+
+    <div
+    id="learners-management-submenu"
+    class="hidden">
+
+    <div>
+
+        <button
+            class="admin-sidebar-btn"
+            onclick="toggleSubmenu('learners-submenu')">
+
+            Learners
+
+        </button>
+
+        <div
+            id="learners-submenu"
+            class="hidden">
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="openCreateLearnerPage()">
+
+                Create Learner
+
+            </button>
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="openViewLearnersPage()">
+
+                View Learners
+
+            </button>
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="openManageLearnersPage()">
+
+                Manage Learners
+
+            </button>
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="openAssignCoursesPage()">
+
+                Assign Course
+
+            </button>
+
+            </div>
+
+            <button
+    class="admin-sidebar-btn"
+    onclick="toggleSubmenu('progress-submenu')">
+
+    Learning Progress
+
+</button>
+
+<div
+    id="progress-submenu"
+    class="hidden">
+
+    <button
+        class="sidebar-sub-btn"
+        onclick="openResetProgressPage()">
+
+        Reset Progress
+
+    </button>
+
+</div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<div>
+
+    <button
+        class="sidebar-group-btn"
+        onclick="toggleSubmenu(
+            'administration-submenu'
+        )">
+
+        🛡️ Administration
+
+    </button>
+
+    <div
+        id="administration-submenu"
+        class="hidden">
+
+        <button
+            class="admin-sidebar-btn"
+            onclick="openCreateAdministratorPage()">
+
+            Create Administrator
+
+        </button>
+
+        <button
+            class="admin-sidebar-btn"
+            onclick="openManageAdministratorsPage()">
+
+            Manage Administrators
+
+        </button>
+
+    </div>
+
+</div>
+
+<button
+    class="sidebar-group-btn"
+    onclick="toggleSubmenu(
+        'settings-submenu'
+    )">
+
+    Settings
+
+</button>
+
+<div
+    id="settings-submenu"
+    class="hidden">
+
+    <button
+        class="admin-sidebar-btn"
+        onclick="openAdministratorProfile()">
+
+        Profile
+
+    </button>
+
+    <button
+        class="admin-sidebar-btn"
+        onclick="openChangeAdminPassword()">
+
+        Change Password
+
+    </button>
+
+    <button
+        class="admin-sidebar-btn"
+        onclick="logoutAdmin()">
+
+        Logout
+
+    </button>
+
+</div>
+
+
+        </div> <!-- /sidebar -->
+
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content">
+
+            <!-- ADMIN PAGE -->
+            <div id="admin-page" class="app-page hidden">
+                <h2>Dashboard</h2>
+                <div id="admin-stats-container"></div>
+                <div id="course-management-container"></div>
+            </div>
+
+            <div
+    id="master-data-page"
+    class="app-page hidden">
+
+    <h2>
+
+        View Master Data
+
+    </h2>
+
+    <div
+        id="master-data-content">
+
+    </div>
+
+</div>
+
+            <!-- CREATE COURSE -->
+            <div id="create-course-page" class="app-page hidden">
+                <h2>Create Course</h2>
+                <div id="create-course-content">
+                    <div class="item-card">
+                        <h3>Create Course</h3>
+                        <div id="course-form-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MANAGE COURSES -->
+            <div id="manage-courses-page" class="app-page hidden">
+                <h2>Manage Courses</h2>
+                <div id="manage-courses-content">
+                    <div class="item-card">
+                        <h3>Existing Courses</h3>
+                        <div id="courses-list-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEARNING AREAS -->
+            <div id="create-area-page" class="app-page hidden">
+                <h2>Create Learning Area</h2>
+                <div id="create-area-content"></div>
+            </div>
+
+            <div id="manage-areas-page" class="app-page hidden">
+                <h2>Manage Learning Areas</h2>
+                <div id="manage-areas-content"></div>
+            </div>
+
+            <!-- THEMES -->
+            <div id="create-theme-page" class="app-page hidden">
+                <h2>Create Theme</h2>
+                <div id="create-theme-content"></div>
+            </div>
+
+            <div id="manage-themes-page" class="app-page hidden">
+                <h2>Manage Themes</h2>
+                <div id="manage-themes-content"></div>
+            </div>
+
+            <!-- LISTS -->
+            <div id="create-list-page" class="app-page hidden">
+                <h2>Create List</h2>
+                <div id="create-list-content"></div>
+            </div>
+
+            <div id="manage-lists-page" class="app-page hidden">
+                <h2>Manage Lists</h2>
+                <div id="manage-lists-content"></div>
+            </div>
+
+            <!-- WORDS & LESSONS -->
+            <div id="upload-words-page" class="app-page hidden">
+                <h2>Upload Words</h2>
+                <div id="upload-words-content"></div>
+            </div>
+
+            <div id="upload-lessons-page" class="app-page hidden">
+                <h2>Upload Lessons</h2>
+                <div id="upload-lessons-content"></div>
+            </div>
+
+            <!-- APPEND CONTENT -->
+            <div id="append-content-page" class="app-page hidden">
+                <h2>Append Content</h2>
+                <div id="append-content-content"></div>
+            </div>
+
+            <div id="lesson-management-page" class="app-page hidden">
+                <h2>Lesson Management</h2>
+                <div id="lesson-management-content"></div>
+            </div>
+
+            <div id="edit-vocabulary-page" class="app-page hidden">
+                <h2>Edit Vocabulary</h2>
+            <div id="edit-vocabulary-content"></div>
+            </div>
+
+            <div id="content-id-grid-page" class="app-page hidden">
+                <h2>Content ID Grid</h2>
+                <div id="content-id-grid-container"></div>
+            </div>
+
+            <!-- QUESTIONS -->
+            <div id="upload-questions-page" class="app-page hidden">
+                <h2>Upload Questions</h2>
+                <div id="upload-questions-content"></div>
+            </div>
+
+            <div id="manage-sets-page" class="app-page hidden">
+                <h2>Manage Sets</h2>
+                <div id="manage-sets-content"></div>
+            </div>
+
+            <div id="review-questions-page" class="app-page hidden">
+                <h2>Review Questions</h2>
+                <div id="review-questions-content"></div>
+            </div>
+
+            <div id="question-id-grid-page" class="app-page hidden">
+                <h2>Question ID Grid</h2>
+            <div id="question-id-grid-container">
+            </div>
+
+</div>
+
+            <div id="create-learner-page"
+    class="app-page hidden">
+
+    <h2>
+
+        Create Learner
+
+    </h2>
+
+    <div id="create-learner-content">
+
+    </div>
+
+</div>
+
+<div
+    id="view-learners-page"
+    class="app-page hidden">
+
+    <h2>
+
+        View Learners
+
+    </h2>
+
+    <div
+        id="view-learners-content">
+
+        <div class="item-card">
+
+    <h3>
+
+        Learners List
+
+    </h3>
+
+    <div
+        id="learners-list-container">
+
+        <table
+        id="learners-table">
+
+    </table>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="manage-learners-page"
+    class="app-page hidden">
+
+    <h2>
+
+        Manage Learners
+
+    </h2>
+
+    <div id="manage-learners-content">
+
+        <div class="item-card">
+
+            <h3>
+
+                Manage Learners
+
+            </h3>
+
+            <div
+                id="manage-learners-container">
+
+                <label>
+
+    Search By
+
+</label>
+
+<select
+    id="learner-search-type"
+    class="admin-input">
+
+    <option value="learnerId">
+
+        Learner ID
+
+    </option>
+
+    <option value="fullName">
+
+        Full Name
+
+    </option>
+
+    <option value="mobile">
+
+        Mobile Number
+
+    </option>
+
+</select>
+
+<label>
+
+    Search Value
+
+</label>
+
+<input
+    type="text"
+    id="learner-search-value"
+    class="admin-input">
+
+<button
+    class="admin-btn"
+    onclick="searchLearner()">
+
+    Search
+
+</button>
+
+<div
+    id="learner-search-result">
+
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <div id="assign-course-learners-page" 
+    class="app-page hidden">
+
+    <h2>
+
+        Assign Courses 
+
+    </h2>
+
+    <div id="assign-course-learners-content"> 
+
+        <div class="item-card">
+
+            <h3>
+
+                Assign Courses 
+
+            </h3>
+
+            <div
+                id="assign-course-learners-container"> 
+
+                <label>
+
+    Search By
+
+</label>
+
+<select
+    id="assign-course-search-type"
+    class="admin-input">
+
+    <option value="learnerId">
+
+        Learner ID
+
+    </option>
+
+    <option value="fullName">
+
+        Full Name
+
+    </option>
+
+    <option value="mobile">
+
+        Mobile Number
+
+    </option>
+
+</select>
+
+<label>
+
+    Search Value
+
+</label>
+
+<input
+    type="text"
+    id="assign-course-search-value"
+    class="admin-input">
+
+<button
+    class="admin-btn"
+    onclick="searchAssignCourseLearner()">
+
+    Search
+
+</button>
+
+<div
+    id="assign-course-search-result">
+
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div
+    id="reset-progress-page"
+    class="app-page hidden">
+
+    <h2>
+
+        Reset Progress
+
+    </h2>
+
+    <div
+        id="reset-progress-content">
+
+    </div>
+
+</div>
+
+
+<div
+    id="create-administrator-page"
+    class="app-page hidden">
+
+    <div
+        id="create-administrator-container">
+
+    </div>
+
+</div>
+
+
+<div
+    id="manage-administrators-page"
+    class="app-page hidden">
+
+    <div
+        id="manage-administrators-container">
+
+    </div>
+
+</div>
+
+<div
+    id="admin-profile-page"
+    class="app-page hidden">
+
+    <div
+        id="admin-profile-container">
+
+    </div>
+
+</div>
+
+<div
+    id="admin-change-password-page"
+    class="app-page hidden">
+
+    <div
+        id="admin-change-password-container">
+
+    </div>
+
+</div>
+
+
+        </div> <!-- /main-content -->
+    </div> <!-- /course-page -->
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="admin-dashboard.js"></script>
+    <script src="lms-courses.js"></script>
+    <script src="lms-learningAreas.js"></script>
+    <script src="lms-themes.js"></script>
+    <script src="lms-lists.js"></script>
+    <script src="learningItems.js"></script>
+    <script src="lms-questions.js"></script>
+    <script src="lms-administrators.js"></script>
+    <script src="globals.js"></script>
+    <script src="repository.js"></script>
+    <script src="lms-learners.js"></script>
+    <script src="initialize.js"></script>
+    <script src="shared.js"></script>
+    <script src="learner-statistics.js"></script>
+    <script src="lesson-renderer.js"></script>
+    <script src="lesson-editor.js"></script>
+    <script src="admin-authentication.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+</html>
