@@ -559,7 +559,7 @@ function loadAssessmentQuestions() {
 function getCurrentLearnerProgress() {
 
     const learnerId =
-        currentLearner;
+        currentLearner.learnerId;
 
     if (
         !learnerProgress[
@@ -603,12 +603,6 @@ function loadApplicationData() {
 
 }
 
-
-
-
-/*======================================
-    ID Generation Helpers
-========================================*/
 
 
 /*===============================
@@ -765,5 +759,817 @@ function getNextAreaId() {
             3,
             "0"
         );
+
+}
+
+/*======================================
+        ADMIN DATA
+======================================*/
+
+function getAdministrators() {
+
+    return administrators;
+
+}
+
+/*======================================
+        ADMIN SEARCH
+======================================*/
+
+function getAdministratorByUsername(
+
+    username
+
+) {
+
+    return getAdministrators().find(
+
+        function(admin) {
+
+            return (
+
+                admin.username ===
+                username
+
+            );
+
+        }
+
+    );
+
+}
+
+/*======================================
+        ADMIN SEARCH
+======================================*/
+
+function getAdministratorById(
+
+    adminId
+
+) {
+
+    return getAdministrators().find(
+
+        function(admin) {
+
+            return (
+
+                admin.adminId ===
+                adminId
+
+            );
+
+        }
+
+    );
+
+}
+
+
+/*=================================
+    Learner Progress Repository
+===================================*/
+
+function getAllLearnerProgress() {
+
+    return (
+        JSON.parse(
+            localStorage.getItem(
+                "learnerProgress"
+            )
+        ) || {}
+    );
+
+}
+
+/*======================================
+    Get Learner Progress By Id
+========================================*/
+
+function getLearnerProgressById(
+
+    learnerId
+
+) {
+
+    return learnerProgress[
+        learnerId
+    ];
+
+}
+
+/*======================================
+    Get Learning Areas By Course
+========================================*/
+
+function getLearningAreasByCourse(
+    courseId
+) {
+
+    const course =
+        getCourseById(
+            courseId
+        );
+
+    if (!course) {
+
+        return [];
+
+    }
+
+    const learningAreaIds = [];
+
+    course.assignedLists.forEach(
+        function(listId) {
+
+            const list =
+                getListById(
+                    listId
+                );
+
+            if (!list) {
+
+                return;
+
+            }
+
+            const theme =
+                getThemeById(
+                    list.themeId
+                );
+
+            if (!theme) {
+
+                return;
+
+            }
+
+            if (
+                !learningAreaIds.includes(
+                    theme.learningAreaId
+                )
+            ) {
+
+                learningAreaIds.push(
+                    theme.learningAreaId
+                );
+
+            }
+
+        }
+    );
+
+    return learningAreaIds.map(
+        function(areaId) {
+
+            return getLearningAreaById(
+                areaId
+            );
+
+        }
+    ).filter(Boolean);
+
+}
+
+
+/*======================================
+    Collection Getters
+========================================*/
+
+function getCourses() {
+
+    return courses;
+
+}
+
+function getLearningAreas() {
+
+    return learningAreas;
+
+}
+
+function getThemes() {
+
+    return themes;
+
+}
+
+function getLists() {
+
+    return lists;
+
+}
+
+function getLearningItems() {
+
+    return learningItems;
+
+}
+
+function getAssessmentQuestions() {
+
+    return assessmentQuestions;
+
+}
+
+function getLearners() {
+
+    return learners;
+
+}
+
+
+/*======================================
+    Get Course By Id
+========================================*/
+
+function getCourseById(
+    courseId
+) {
+
+    return getCourses().find(
+        function(course) {
+
+            return (
+                course.courseId ===
+                courseId
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get Learning Area By Id
+========================================*/
+
+function getLearningAreaById(
+    areaId
+) {
+
+    return getLearningAreas().find(
+        function(area) {
+
+            return (
+                area.areaId ===
+                areaId
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get List By Id
+========================================*/
+
+function getListById(
+    listId
+) {
+
+    return getLists().find(
+        function(list) {
+
+            return (
+                list.listId ===
+                listId
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get Theme By Id
+========================================*/
+
+function getThemeById(
+    themeId
+) {
+
+    return getThemes().find(
+        function(theme) {
+
+            return (
+                theme.themeId ===
+                themeId
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get Learning Item By Id
+========================================*/
+
+function getLearningItemById(
+    contentId
+) {
+
+    return getLearningItems().find(
+        function(item) {
+
+            return (
+                item.contentId ===
+                contentId
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get Question By Id
+========================================*/
+
+function getQuestionById(
+    questionId
+) {
+
+    return getAssessmentQuestions().find(
+        function(question) {
+
+            return (
+                question.questionId ===
+                questionId
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get Learner By Id
+========================================*/
+
+function getLearnerById(
+    learnerId
+) {
+
+    return getLearners().find(
+        function(learner) {
+
+            return (
+                learner.learnerId ===
+                learnerId
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get Themes By Learning Area
+========================================*/
+
+function getThemesByLearningArea(
+    learningAreaId
+) {
+
+    return getThemes().filter(
+        function(theme) {
+
+            return (
+                theme.learningAreaId ===
+                learningAreaId
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get Lists By Themes Area
+========================================*/
+
+function getListsByThemeId(
+    themeId
+) {
+
+    return getLists().filter(
+        function(list) {
+
+            return (
+                list.themeId
+                === themeId
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get Items By List Id
+========================================*/
+
+function getItemsByListId(
+    listId
+) {
+
+    return getLearningItems().filter(
+        function(item) {
+
+            return (
+                item.listId ===
+                listId
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get Questions By List Id
+========================================*/
+
+function getQuestionsByListId(
+    listId
+) {
+
+    return getAssessmentQuestions().filter(
+        function(question) {
+
+            return (
+                question.listId ===
+                listId
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get Questions By Set
+========================================*/
+
+function getQuestionsBySet(
+    listId,
+    setName
+) {
+
+    return getAssessmentQuestions().filter(
+        function(question) {
+
+            return (
+
+                question.listId ===
+                listId
+
+                &&
+
+                question.setName ===
+                setName
+
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get Sets By List Id
+========================================*/
+
+function getSetsByListId(
+    listId
+) {
+
+    return [
+        ...new Set(
+
+            getQuestionsByListId(
+                listId
+            ).map(
+                function(question) {
+
+                    return (
+                        question.setName
+                    );
+
+                }
+            )
+
+        )
+    ];
+
+}
+
+
+/*======================================
+    Get Assessment Sets By List Id
+========================================*/
+
+function getAssessmentSetsByListId(
+    listId
+) {
+
+    return getSetsByListId(
+        listId
+    ).filter(
+        function(setName) {
+
+            return setName.startsWith(
+                "Set"
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get Mastered Sets By List Id
+========================================*/
+
+function getMasteredSetsByListId(
+    listId
+) {
+
+    return getSetsByListId(
+        listId
+    ).filter(
+        function(setName) {
+
+            return setName.startsWith(
+                "Day"
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get Lists By Course
+========================================*/
+
+function getListsByCourse(
+    courseId
+) {
+
+    const course =
+        getCourseById(
+            courseId
+        );
+
+    if (!course) {
+
+        return [];
+
+    }
+
+    return course.assignedLists.map(
+        function(listId) {
+
+            return getListById(
+                listId
+            );
+
+        }
+    ).filter(Boolean);
+
+}
+
+/*======================================
+    Get List Progress
+========================================*/
+
+function getListProgress(
+    listId
+) {
+
+    const learnerData =
+        getCurrentLearnerProgress();
+
+    return learnerData.lists[
+        listId
+    ];
+
+}
+
+/*======================================
+    Get Current List Progress
+========================================*/
+
+function getCurrentListProgress() {
+
+    return getListProgress(
+        currentList
+    );
+
+}
+
+/*======================================
+    Get Active Themes By Learning Area
+========================================*/
+
+function getActiveThemesByLearningArea(
+    areaId
+) {
+
+    return getThemesByLearningArea(
+        areaId
+    ).filter(
+        function(theme) {
+
+            return (
+                theme.isActive !== false
+            );
+
+        }
+    );
+
+}
+
+/*======================================
+    Get Active Lists By Theme
+========================================*/
+
+function getActiveListsByTheme(
+    themeId
+) {
+
+    return getListsByThemeId(
+        themeId
+    ).filter(
+        function(list) {
+
+            return (
+                list.isActive !== false
+            );
+
+        }
+    );
+
+}
+
+
+/*======================================
+    Get View Learner ID
+========================================*/
+
+function getViewLearnerId() {
+
+    return sessionStorage.getItem(
+        "viewLearnerId"
+    );
+
+}
+
+/*======================================
+    NEXT ADMINISTRATOR ID
+======================================*/
+
+function getNextAdministratorId() {
+
+    if (
+
+        administrators.length === 0
+
+    ) {
+
+        return "ADM001";
+
+    }
+
+    const lastAdministrator =
+
+        administrators[
+            administrators.length - 1
+        ];
+
+    const nextNumber =
+
+        Number(
+
+            lastAdministrator.adminId.substring(
+                3
+            )
+
+        ) + 1;
+
+    return (
+
+        "ADM" +
+
+        String(
+            nextNumber
+        ).padStart(
+            3,
+            "0"
+        )
+
+    );
+
+}
+
+/*======================================
+    NEXT ADMINISTRATOR ID
+======================================*/
+
+function getNextAdministratorId() {
+
+    if (
+        administrators.length === 0
+    ) {
+
+        return "ADM001";
+
+    }
+
+    const lastAdministrator =
+
+        administrators[
+            administrators.length - 1
+        ];
+
+    const lastNumber =
+
+        Number(
+            lastAdministrator.adminId
+                .replace(
+                    "ADM",
+                    ""
+                )
+        );
+
+    return (
+
+        "ADM"
+
+        +
+
+        String(
+            lastNumber + 1
+        ).padStart(
+            3,
+            "0"
+        )
+
+    );
+
+}
+
+function getNextLearnerId() {
+
+    if (
+        learners.length === 0
+    ) {
+
+        return "AKL0001";
+
+    }
+
+    const lastLearner =
+
+        learners[
+            learners.length - 1
+        ];
+
+    const lastNumber =
+
+        Number(
+            lastLearner.learnerId
+                .replace(
+                    "AKL",
+                    ""
+                )
+        );
+
+    return (
+
+        "AKL"
+
+        +
+
+        String(
+            lastNumber + 1
+        ).padStart(
+            4,
+            "0"
+        )
+
+    );
 
 }

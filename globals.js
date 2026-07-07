@@ -51,6 +51,9 @@ let currentLearner = null;
 
 let currentAdministrator = null;
 
+let currentAdministratorEditing =
+    null;
+
 let isAdminView = false;
 
 let masteredAssessmentQuestions = {};

@@ -9067,12 +9067,36 @@ function showCreateAdministratorForm() {
 
 </div>
 
-
-
-
 `;
 
+document.getElementById(
+    "administrator-id"
+).value =
+
+    getNextAdministratorId();
+
+    if (
+
+    currentAdministratorEditing
+
+) {
+
+    document.querySelector(
+        "#create-administrator-container h2"
+    ).innerText =
+
+        "Edit Administrator";
+
+    document.querySelector(
+        "#create-administrator-container .admin-btn"
+    ).innerText =
+
+        "Update Administrator";
+
 }
+
+}
+
 
 
 /*======================================
@@ -9129,18 +9153,492 @@ if (
 
 }
 
-    console.log({
-        administratorId,
-        fullName,
-        username,
-        password,
-        confirmPassword,
-        role,
-        status
-    });
+const existingUsername =
+
+    getAdministratorByUsername(
+        username
+    );
+
+if (
+
+    existingUsername
+
+    &&
+
+    existingUsername.adminId
+        !== currentAdministratorEditing
+
+) {
+
+    alert(
+        "Username already exists."
+    );
+
+    return;
 
 }
 
+const administrator = {
+
+    adminId: administratorId,
+
+    fullName: fullName,
+
+    username: username,
+
+    password: password,
+
+    role: role,
+
+    status: status,
+
+    createdBy: currentAdministrator,
+
+    createdDate: new Date().toISOString(),
+
+    modifiedBy: "",
+
+    modifiedDate: "",
+
+    lastLogin: "",
+
+    notes: ""
+
+};
+
+   if (
+
+    currentAdministratorEditing
+
+) {
+
+    const existingAdministrator =
+
+        getAdministratorById(
+            currentAdministratorEditing
+        );
+
+    existingAdministrator.fullName =
+        administrator.fullName;
+
+    existingAdministrator.username =
+        administrator.username;
+
+    existingAdministrator.password =
+        administrator.password;
+
+    existingAdministrator.role =
+        administrator.role;
+
+    existingAdministrator.status =
+        administrator.status;
+
+    existingAdministrator.modifiedBy =
+        currentAdministrator;
+
+    existingAdministrator.modifiedDate =
+        new Date().toISOString();
+
+    alert(
+        "Administrator updated successfully."
+    );
+
+    currentAdministratorEditing =
+        null;
+
+    openManageAdministratorsPage();
+
+}
+
+else {
+
+    administrators.push(
+        administrator
+    );
+
+    alert(
+        "Administrator created successfully."
+    );
+
+    clearAdministratorForm();
+
+}
+
+saveAllAdministrators();
+
+}
+
+
+/*======================================
+    CLEAR ADMINISTRATOR FORM
+======================================*/
+
+function clearAdministratorForm() {
+
+    document.getElementById(
+        "administrator-id"
+    ).value = getNextAdministratorId();
+
+    document.getElementById(
+        "administrator-full-name"
+    ).value = "";
+
+    document.getElementById(
+        "administrator-username"
+    ).value = "";
+
+    document.getElementById(
+        "administrator-password"
+    ).value = "";
+
+    document.getElementById(
+        "administrator-confirm-password"
+    ).value = "";
+
+    document.getElementById(
+        "administrator-role"
+    ).selectedIndex = 0;
+
+    document.getElementById(
+        "administrator-status"
+    ).selectedIndex = 0;
+
+}
+
+/*======================================
+    VIEW ADMINISTRATORS
+======================================*/
+
+function openViewAdministratorsPage() {
+
+    showPage(
+        "view-administrator-page"
+    );
+
+    showViewAdministrators();
+
+}
+
+/*======================================
+    SHOW VIEW ADMINISTRATORS
+======================================*/
+
+function showViewAdministrators() {
+
+    const container =
+
+    document.getElementById(
+        "view-administrator-container"
+    );
+
+container.innerHTML = `
+
+<div class="item-card">
+
+    <h2>
+
+        View Administrators
+
+    </h2>
+
+    <table class="admin-table">
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Name</th>
+
+                <th>Username</th>
+
+                <th>Role</th>
+
+                <th>Status</th>
+
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody
+            id="view-administrator-table">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+`;
+
+const tableBody =
+
+    document.getElementById(
+        "view-administrator-table"
+    );
+
+getAdministrators().forEach(
+
+    function(administrator) {
+
+        tableBody.innerHTML += `
+
+<tr>
+
+    <td>
+
+        ${administrator.adminId}
+
+    </td>
+
+    <td>
+
+        ${administrator.fullName}
+
+    </td>
+
+    <td>
+
+        ${administrator.username}
+
+    </td>
+
+    <td>
+
+        ${administrator.role}
+
+    </td>
+
+    <td>
+
+        ${administrator.status}
+
+    </td>
+
+    <td>
+
+    <button
+
+        class="admin-btn"
+
+        onclick="
+
+            viewAdministrator(
+
+                '${administrator.adminId}'
+
+            )
+
+        ">
+
+        View
+
+    </button>
+
+</td>
+
+</tr>
+
+`;
+
+    }
+
+);
+
+}
+
+/*======================================
+    VIEW ADMINISTRATOR
+======================================*/
+
+function viewAdministrator(
+
+    adminId
+
+) {
+    showPage(
+    "admin-profile-page"
+);
+
+showAdministratorProfile(
+    adminId
+);
+}
+
+/*======================================
+    SHOW ADMINISTRATOR PROFILE
+======================================*/
+
+function showAdministratorProfile(adminId) {
+
+    const administrator =
+
+        getAdministratorById(
+            adminId
+        );
+
+    const container =
+
+        document.getElementById(
+            "admin-profile-container"
+        );
+
+    container.innerHTML = `
+
+<div class="item-card">
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Administrator ID</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.adminId}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Full Name</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.fullName}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Username</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.username}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Role</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.role}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Status</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.status}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Created By</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.createdBy}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Created Date</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.createdDate}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Last Login</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.lastLogin || "-"}
+
+    </div>
+
+</div>
+
+<div class="profile-row">
+
+    <div class="profile-label">
+
+        <strong>Notes</strong>
+
+    </div>
+
+    <div class="profile-value">
+
+        ${administrator.notes || "-"}
+
+    </div>
+
+</div>
+
+</div>
+
+`;
+
+}
 /*======================================
     MANAGE ADMINISTRATORS
 ======================================*/
@@ -9157,7 +9655,300 @@ function openManageAdministratorsPage() {
 
 function showManageAdministrators() {
 
+    const container =
+
+        document.getElementById(
+            "manage-administrators-container"
+        );
+
+    container.innerHTML = `
+
+<div class="item-card">
+
+    <h2>
+
+        Manage Administrators
+
+    </h2>
+
+    <label>
+
+        Search By
+
+    </label>
+
+    <select
+        id="administrator-search-by"
+        class="admin-input">
+
+        <option value="adminId">
+
+            Administrator ID
+
+        </option>
+
+        <option value="fullName">
+
+            Full Name
+
+        </option>
+
+        <option value="username">
+
+            Username
+
+        </option>
+
+    </select>
+
+    <label>
+
+        Search Value
+
+    </label>
+
+    <input
+        type="text"
+        id="administrator-search-value"
+        class="admin-input">
+
+    <br>
+
+    <button
+        class="admin-btn"
+        onclick="searchAdministrator()">
+
+        Search
+
+    </button>
+
+    <div
+        id="administrator-search-results">
+
+    </div>
+
+</div>
+
+`;
+
 }
+
+
+/*======================================
+    SEARCH ADMINISTRATOR
+======================================*/
+
+function searchAdministrator() {
+
+    const searchBy =
+
+    document.getElementById(
+        "administrator-search-by"
+    ).value;
+
+const searchValue =
+
+    document.getElementById(
+        "administrator-search-value"
+    ).value.trim();
+
+const administrator =
+
+    getAdministrators().find(
+
+        function(admin) {
+
+            return (
+
+                admin[searchBy] ===
+                searchValue
+
+            );
+
+        }
+
+    );
+
+const results =
+
+    document.getElementById(
+        "administrator-search-results"
+    );
+
+if (!administrator) {
+
+    results.innerHTML = `
+
+<p>
+
+    Administrator not found.
+
+</p>
+
+`;
+
+    return;
+
+}
+
+results.innerHTML = `
+
+<table class="admin-table">
+
+    <thead>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Name</th>
+
+            <th>Username</th>
+
+            <th>Role</th>
+
+            <th>Status</th>
+
+            <th>Action</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr>
+
+            <td>${administrator.adminId}</td>
+
+            <td>${administrator.fullName}</td>
+
+            <td>${administrator.username}</td>
+
+            <td>${administrator.role}</td>
+
+            <td>${administrator.status}</td>
+
+            <td>
+
+                <button
+                    class="admin-btn"
+                    onclick="
+                        editAdministrator(
+                            '${administrator.adminId}'
+                        )
+                    ">
+
+                    Edit
+
+                </button>
+
+            </td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+
+`;
+
+}
+
+
+/*======================================
+    EDIT ADMINISTRATOR
+======================================*/
+
+/*======================================
+    EDIT ADMINISTRATOR
+======================================*/
+
+function editAdministrator(
+    adminId
+) {
+
+    const administrator =
+
+        getAdministratorById(
+            adminId
+        );
+
+    currentAdministratorEditing =
+    adminId;
+
+    showPage(
+        "create-administrator-page"
+    );
+
+    showCreateAdministratorForm();
+
+
+document.getElementById(
+    "administrator-id"
+).value =
+
+    administrator.adminId;
+
+document.getElementById(
+    "administrator-full-name"
+).value =
+
+    administrator.fullName;
+
+document.getElementById(
+    "administrator-username"
+).value =
+
+    administrator.username;
+
+document.getElementById(
+    "administrator-password"
+).value =
+
+    administrator.password;
+
+document.getElementById(
+    "administrator-confirm-password"
+).value =
+
+    administrator.password;
+
+document.getElementById(
+    "administrator-role"
+).value =
+
+    administrator.role;
+
+document.getElementById(
+    "administrator-status"
+).value =
+
+    administrator.status;
+
+if (
+
+    currentAdministratorEditing
+
+) {
+
+    const existingAdministrator =
+
+        getAdministratorById(
+            currentAdministratorEditing
+
+        );
+
+console.log(
+        existingAdministrator
+    );
+
+
+}
+
+}
+
+
 
 /*======================================
     Application Startup
