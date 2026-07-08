@@ -51,12 +51,17 @@ let currentLearner = null;
 
 let currentAdministrator = null;
 
-let currentAdministratorEditing =
-    null;
-
 let isAdminView = false;
 
 let masteredAssessmentQuestions = {};
+
+let currentContentSeriesId = "";
+
+let currentCategoryId = "";
+
+let currentArticleId = null;
+
+let articleEditMode = false;
 
 let learnerProgress = {
 

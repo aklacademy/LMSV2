@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>HTML Practice</title>
+
+    <link rel="stylesheet" href="lms.css">
+    <link rel="stylesheet" href="login.css">
+
+</head>
+
+<body>
+
+    <div
+    id="sidebar-overlay"
+    class="sidebar-overlay"
+    onclick="closeSidebar()">
+</div>
+
+    <div id="top-navbar">
+
+<button
+    id="menu-toggle"
+    class="nav-btn"
+    onclick="toggleMenu()">
+
+    ☰
+</button>
+
+        <button
+    id="back-btn"
+    class="nav-btn"
+    onclick="goBack()">
+
+    ↩ Back
+
+</button>
+
+<button
+    id="home-btn"
+    class="nav-btn"
+    onclick="goHome()">
+
+    🏠 Home
+
+</button>
+
+<button
+    id="courses-btn"
+    class="nav-btn"
+    onclick="goToCourses()">
+
+    📚 Courses
+
+</button>
+
+    </div>
+
+    <!-- COVER PAGE
+     Acts as Login Page
+-->
+
+<div id="cover-page"
+    class="app-page">
+
+    <div class="login-container">
+
+        <img
+            src="logo"
+            class="login-logo">
+
+        <h1>
+
+            Practice
+
+        </h1>
+
+        <h2>
+
+            ACE Method™
+
+        </h2>
+
+        <h3>
+
+             ACE Mastery
+
+        </h3>
+
+        <p>
+
+            Master the Language,
+            Shape Your Destiny
+
+        </p>
+
+        <input
+            id="login-mobile"
+            class="admin-input"
+            placeholder="Mobile Number">
+
+            <input
+    id="login-password"
+    type="password"
+    class="admin-input"
+    placeholder="Password">
+
+    <label>
+
+    <input
+        type="checkbox"
+        onchange="togglePassword()">
+
+    Show password
+
+</label>
+
+        <button
+            class="admin-btn"
+            onclick="loginLearner()">
+
+            Login
+
+        </button>
+
+    </div>
+
+    <button
+    id="back-to-admin-btn"
+    class="admin-btn hidden"
+    onclick="backToAdmin()">
+
+    ← Back to Admin
+
+</button>
+
+    <div
+        id="course-container"
+        class="course-grid hidden">
+
+    </div>
+
+</div>
+
+    <!-- COURSE PAGE -->
+
+    <div id="course-page"
+        class="app-layout hidden">
+
+        <!-- LEFT SIDEBAR -->
+
+        <div class="sidebar">
+
+             <button
+    id="sidebar-close-btn"
+    onclick="toggleMenu()">
+
+    ✕
+
+</button>
+
+            <h2 class="course-title">
+
+</h2>
+
+
+<div>
+
+</div>
+
+<button
+    class="sidebar-btn"
+    onclick="openProfile()">
+
+    👤 Profile
+
+</button>
+
+<button class="sidebar-btn"
+    onclick="openSearch()">
+
+    🔍Search
+
+</button>
+
+
+
+            <button class="sidebar-btn"
+    onclick="openProgressDashboard()">
+
+    📊 Progress
+
+</button>
+
+            <button class="sidebar-btn"
+                onclick="openLearn()">
+
+               📚 Learning Areas
+
+            </button>
+
+            
+
+                      <div>
+
+    <button class="sidebar-btn"
+        onclick="toggleAssessmentMenu()">
+
+        📝Assessment
+
+    </button>
+
+    <div id="assessment-submenu"
+        class="hidden">
+
+        <button class="sidebar-sub-btn"
+            onclick="
+                openAssessmentDashboard()
+            ">
+
+            Assessment
+
+        </button>
+
+        <button class="sidebar-sub-btn"
+            onclick="
+                openAssessmentReviewDashboard()
+            ">
+
+            Review Assessment
+
+        </button>
+
+    </div>
+
+</div>
+
+            <button class="sidebar-btn"
+                onclick="openRevisionDashboard()">
+
+                🔄Revision
+
+            </button>
+
+<div>
+
+    <button class="sidebar-btn"
+        onclick="toggleMasteredMenu()">
+
+        🏆Mastered
+
+    </button>
+
+
+    <div id="mastered-submenu"
+        class="hidden">
+
+        <button class="sidebar-sub-btn"
+            onclick="
+                openMasteredReviewDashboard()
+            ">
+
+            Review 
+
+        </button>
+
+        <button class="sidebar-sub-btn"
+            onclick="
+                openMasteredAssessmentDashboard()
+            ">
+
+            Assessment
+
+        </button>
+
+        <button class="sidebar-sub-btn"
+            onclick="
+                openMasteredRevisionDashboard()
+            ">
+
+            Revision
+
+        </button>
+
+       
+
+        
+
+    </div>
+
+</div>
+
+<button
+    class="sidebar-btn"
+    onclick="openChangePassword()">
+
+    🔑 Change Password
+
+</button>
+
+ <button
+    class="sidebar-btn"
+    onclick="logoutLearner()">
+
+    🚪 Logout
+
+</button>
+
+</div>
+
+
+
+        <!-- MAIN CONTENT AREA -->
+
+        <div class="main-content">
+
+
+            <!--WELCOME MESSAGE-->
+
+
+           <div id="course-home-page" class="app-page">
+
+    <div class="welcome-card">
+
+    <h2 id="course-welcome-title"></h2>
+
+    <p id="course-welcome-message"></p>
+
+</div>
+</div>
+
+<!-- PROFILE PAGE -->
+<div id="profile-page"
+    class="app-page hidden">
+
+    <h2>
+
+        My Profile
+
+    </h2>
+
+    <div id="profile-container">
+
+    </div>
+
+</div>
+
+
+<!-- CHANGE PASSWORD PAGE -->
+
+<div
+    id="change-password-page"
+    class="app-page hidden">
+
+    <h2>
+
+        Change Password
+
+    </h2>
+
+    <div id="change-password-container">
+
+        <input
+    id="current-password"
+    type="password"
+    class="admin-input"
+    placeholder="Current Password">
+
+<input
+    id="new-password"
+    type="password"
+    class="admin-input"
+    placeholder="New Password">
+
+<input
+    id="confirm-password"
+    type="password"
+    class="admin-input"
+    placeholder="Confirm New Password">
+
+<label>
+
+    <input
+        type="checkbox"
+        onchange="toggleChangePasswordVisibility()">
+
+    Show password
+
+</label>
+
+<button
+    class="admin-btn"
+    onclick="changePassword()">
+
+    Change Password
+
+</button>
+
+    </div>
+
+</div>
+
+
+            <!-- PROGRESS DASHBOARD PAGE -->
+
+<div id="progress-dashboard-page" class="app-page hidden">
+
+    <h2>
+
+        Learner Progress Card
+
+    </h2>
+
+    <div id="progress-dashboard-container">
+
+    </div>
+
+</div>
+
+<!-- SEARCH PAGE -->
+
+<div id="search-page"
+    class="app-page hidden">
+
+    <h2>
+
+        Search
+
+    </h2>
+
+    <div class="search-controls">
+
+        <select id="search-filter">
+
+        </select>
+
+        <input
+            type="text"
+            id="search-input"
+            placeholder="Type keyword..."
+            oninput="searchContent()">
+
+    </div>
+
+    <div id="search-results">
+
+    </div>
+
+    
+
+</div>
+
+
+
+            <!-- LEARN PAGE -->
+
+            <div id="learn-page" class="app-page hidden">
+
+                <h2>
+
+                     Learning Areas
+
+                </h2>
+
+                
+
+                <div id="learning-areas-container"
+                    class="learning-area-grid">
+
+                </div>
+
+            </div>
+
+            
+            <!-- THEMES PAGE -->
+
+<div id="themes-page"
+     class="app-page hidden">
+
+    <h2>
+
+        Themes
+
+    </h2>
+
+    <div id="themes-container"
+         class="theme-grid">
+
+    </div>
+
+</div>
+
+            <!-- LISTS PAGE -->
+
+            <div id="lists-page"
+                class="app-page hidden">
+
+                <h2 id="lists-title"></h2>
+
+                <div id="lists-container"
+                    class="list-grid">
+
+                </div>
+
+            </div>
+
+            <!-- ITEMS PAGE -->
+
+            <div id="items-page"
+                class="app-page hidden">
+
+                <h2 id="items-title"></h2>
+
+                <div id="items-container"></div>
+
+                <div class="card-navigation">
+
+    <button
+        id="prev-btn"
+        class="nav-btn">
+
+        ← Previous
+
+    </button>
+
+    <button
+        id="middle-btn"
+        class="nav-btn">
+
+    </button>
+
+    <button
+        id="next-btn"
+        class="nav-btn">
+
+        Next →
+
+    </button>
+
+</div>
+
+            </div>
+            
+
+            <!-- ASSESSMENT DASHBOARD -->
+
+            <div id="assessment-dashboard-page"
+                class="app-page hidden">
+
+                <h2>
+
+
+                    Assessment
+
+                </h2>
+
+                 <p class="page-description">
+
+    Select a learning area to assess your mastery.
+
+</p>
+
+                <div id="assessment-dashboard-container"
+     class="learning-area-grid">
+
+</div>
+
+            
+
+            </div>
+
+            <!-- ASSESSMENT SETS -->
+
+            <div id="assessment-sets-page"
+                class="app-page hidden">
+
+                <h2>
+
+                    Select Assessment Set
+
+                </h2>
+
+                <div id="assessment-sets-container"
+                    class="assessment-sets-grid">
+
+                </div>
+
+            </div>
+
+            <!-- QUESTION PAGE -->
+
+            <div id="assessment-page"
+                class="app-page hidden">
+
+                <h2 id="assessment-title">
+
+                    Assessment
+
+                </h2>
+
+                <div id="question-container">
+
+                </div>
+
+            </div>
+
+            <!-- REVISION PAGE -->
+
+            <div id="revision-page"
+    class="app-page hidden">
+
+    <h2>
+
+        Revision
+
+    </h2>
+
+    <div id="revision-container"
+        class="assessment-sets-grid">
+
+    </div>
+
+</div>
+
+            <!-- MASTERED PAGE -->
+
+<div id="mastered-page"
+    class="app-page hidden">
+
+    <h2>
+
+        Mastered
+
+    </h2>
+
+    <div class="themes-grid">
+
+        <button class="theme-card"
+            onclick="
+                openMasteredAssessmentDashboard()
+            ">
+
+            Assessment
+
+        </button>
+
+        <button class="theme-card"
+            onclick="
+                openMasteredRevisionDashboard()
+            ">
+
+            Revision
+
+        </button>
+
+    </div>
+
+</div>
+
+    <!-- SCRIPTS -->
+
+   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="lms-courses.js"></script>
+    <script src="lms-learningAreas.js"></script>
+    <script src="lms-themes.js"></script>
+    <script src="lms-lists.js"></script>
+    <script src="learningItems.js"></script>
+    <script src="lms-questions.js"></script>
+    <script src="lms-learners.js"></script>
+     <script src="globals.js"></script>
+    <script src="repository.js"></script>
+    <script src="initialize.js"></script>
+    <script src="shared.js"></script>
+    <script src="lesson-renderer.js"></script>
+    <script src="learner-authentication.js"></script>
+    <script src="learner-core.js"></script>
+    
+</body>
+</html>

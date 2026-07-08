@@ -51,7 +51,7 @@ const totalLists =
     lists.length;
 
 const totalItems =
-    learningItems.length;
+    contents.length;
 
 const totalQuestions =
     assessmentQuestions.length;
@@ -786,14 +786,16 @@ function loadContentById() {
             "content-id-search"
         ).value;
 
-    const lesson =
+    const content =
 
-    getLearningItemById(
-        contentId
-    );
+        getContentById(
+            contentId
+        );
+
+
 
     editLesson(
-        lesson.contentId
+        content.contentId
     );
 
 }
@@ -2540,7 +2542,7 @@ function(row) {
 
     const existingWord =
 
-        getLearningItems().find(
+        getContents().find(
             item =>
 
                 item.contentType ===
@@ -2639,7 +2641,7 @@ function(row) {
 
     };
 
-    learningItems.push(
+    contents.push(
         item
     );
 
@@ -2650,7 +2652,7 @@ function(row) {
 
 
 
- saveAllLearningItems();
+ saveAllContents();
 
 
 document.getElementById(
@@ -2695,39 +2697,39 @@ ${invalidCount}
     LESSON MANAGEMENT
   ===========================*/
 
-  function openLessonManagementPage() {
+  function openContentManagementPage() {
 
     showPage(
-        "lesson-management-page"
+        "content-management-page"
     );
 
-    showLessonManagementForm();
+    showContentManagementForm();
 
 }
 
-function showLessonManagementForm() {
+function showContentManagementForm() {
 
     document.getElementById(
-        "lesson-management-content"
+        "content-management-content"
     ).innerHTML = `
 
     <div class="lesson-actions">
 
-    <button
-        class="nav-btn"
-        onclick="showCreateContent()">
+   <button
+    class="nav-btn"
+    onclick="showLessonCreator()">
 
-        Create Content
+    Create Lesson
 
-    </button>
+</button>
 
-    <button
-        class="nav-btn"
-        onclick="showEditContent()">
+<button
+    class="nav-btn"
+    onclick="showEditContent()">
 
-        Edit Content
+    Edit Lesson
 
-    </button>
+</button>
 
 </div>
 
@@ -2739,6 +2741,28 @@ function showLessonManagementForm() {
 </div>
 
 `;
+
+}
+
+
+function changeContentType() {
+
+    const contentType =
+
+        document.getElementById(
+            "content-type"
+        ).value;
+
+    if (
+
+        contentType ===
+        "lesson"
+
+    ) {
+
+        showLessonCreator();
+
+    }
 
 }
 
@@ -2778,6 +2802,58 @@ function showEditContent() {
 }
 
 function showCreateContent() {
+
+    document.getElementById(
+        "lesson-results"
+    ).innerHTML = `
+
+<h3>
+
+    Create Content
+
+</h3>
+
+<label>
+
+    Content Type
+
+</label>
+
+<select
+    id="content-type"
+    class="admin-input"
+    onchange="changeContentType()">
+
+    <option value="">
+
+        Select Content Type
+
+    </option>
+
+    <option value="lesson">
+
+        Lesson
+
+    </option>
+
+    <option value="article">
+
+        Article
+
+    </option>
+
+</select>
+
+<div
+    id="content-type-container">
+
+</div>
+
+`;
+
+}
+
+function showLessonCreator() {
 
     document.getElementById(
         "lesson-results"
@@ -2856,7 +2932,7 @@ function showCreateContent() {
 
 <input
     type="text"
-    id="lesson-content-id"
+    id="content-content-id"
     class="admin-input"
     readonly>
 
@@ -2890,8 +2966,6 @@ function showCreateContent() {
 }
 
 function createLesson() {
-
-   
 
     const areaId =
         document.getElementById(
@@ -2930,7 +3004,7 @@ const list =
         listId
     );
 
-const lesson = {
+const content  = {
 
     courseId: "",
 
@@ -2968,29 +3042,19 @@ const lesson = {
 
 };
 
- currentLessonId =
-    lesson.contentId;
+ currentContentId =
+    content.contentId;
 
-console.log(
-    currentLessonId
+
+
+contents.push(
+    content
 );
 
-learningItems.push(
-    lesson
-);
+window.currentContentId =
+    content.contentId;
 
-window.currentLessonId =
-    lesson.contentId;
-
-    console.log(
-    window.currentLessonId
-);
-
-saveAllLearningItems();
-
-console.log(
-    learningItems
-);
+saveAllContents();
 
 renderLessonEditor();
 
@@ -3126,17 +3190,7 @@ console.log(
 );
 
 
-    document.getElementById(
-    "sections-list"
-).innerHTML += `
-
-<p>
-
-    ${section.sectionTitle}
-
-</p>
-
-`;
+renderSectionsList();
 
 document.getElementById(
     "section-type"
@@ -3210,43 +3264,34 @@ function insertTag(tag) {
 
 
 
-function saveLessonContent() {
+function saveContent() {
 
     if (
-    currentSections.length === 0
-) {
+        currentSections.length === 0
+    ) {
+
+        alert(
+            "Please add at least one section."
+        );
+
+        return;
+
+    }
+
+    const content =
+
+        getContentById(
+            currentContentId
+        );
+
+    content.content.sections =
+        currentSections;
+
+    saveAllContents();
 
     alert(
-        "Please add at least one section."
+        "Content saved successfully."
     );
-
-    return;
-
-}
-
-const lesson =
-    getLearningItemById(
-        currentLessonId
-    );
-
-lesson.content.sections =
-    currentSections;
-
-    console.log(
-    "LESSON READY TO SAVE:",
-    lesson
-);
-
-console.log(
-    "Saving Lesson:",
-    currentLessonId
-);
-
-    saveAllLearningItems();
-
-alert(
-    "Lesson saved successfully."
-);
 
 }
 
@@ -5549,7 +5594,7 @@ function viewLearner(
     );
 
     window.location.href =
-        "index.html";
+        "learner.html";
 
 }
 
@@ -6111,7 +6156,7 @@ function loadContentGrid() {
         );
 
     const filteredItems =
-    getLearningItems().filter(
+    getContents().filter(
         item =>
             item.listId ===
             listId
@@ -6442,7 +6487,7 @@ function loadQuestionGridContents() {
 
 `;
 
-   getLearningItems().forEach(
+   getContents().forEach(
         function(item) {
 
             if (
@@ -6492,7 +6537,7 @@ function loadQuestionContentGrid() {
         );
 
     const filteredItems =
-    getLearningItems().filter(
+    getContents().filter(
         item =>
             item.listId ===
             listId
@@ -6976,7 +7021,7 @@ function loadVocabularyEditGrid() {
 
     const words =
 
-        getLearningItems().filter(
+        getContents().filter(
             item =>
 
                 item.contentType ===
@@ -7085,7 +7130,7 @@ function loadVocabularyForEdit(
 
     const word =
 
-    getLearningItems().find(
+    getContents().find(
         item =>
 
             item.contentId ==
@@ -7246,7 +7291,7 @@ function saveVocabularyChanges() {
 
     const word =
 
-        getLearningItems().find(
+        getContents().find(
             item =>
 
                 item.contentId ==
@@ -7304,7 +7349,7 @@ function saveVocabularyChanges() {
 
     ];
 
-    saveAllLearningItems();
+    saveAllContents();
 
     alert(
         "Vocabulary Updated Successfully"
@@ -9854,11 +9899,6 @@ results.innerHTML = `
 `;
 
 }
-
-
-/*======================================
-    EDIT ADMINISTRATOR
-======================================*/
 
 /*======================================
     EDIT ADMINISTRATOR

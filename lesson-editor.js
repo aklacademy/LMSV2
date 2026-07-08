@@ -10,7 +10,7 @@ function renderLessonEditor() {
 
 <h3>
 
-    Lesson Editor
+    Content Editor
 
 </h3>
 
@@ -159,9 +159,9 @@ function renderLessonEditor() {
 
 <button
     class="nav-btn"
-    onclick="saveLessonContent()">
+    onclick="saveContent()">
 
-    Save Lesson
+    Save Content
 
 </button>
 
@@ -178,14 +178,6 @@ function renderLessonEditor() {
 ===================================*/
 
 function renderSectionsList() {
-
-    console.log(
-    "renderSectionsList called"
-);
-
-console.log(
-    currentSections
-);
 
     document.getElementById(
         "sections-list"
@@ -285,52 +277,27 @@ document.getElementById(
 
 function editLesson(contentId) {
 
-    const lesson =
+    const content  =
 
-        learningItems.find(
+        contents.find(
             item =>
                 item.contentId ==
                 contentId
         );
 
-        console.log(
-    lesson
-);
 
-console.log(
-    lesson.content
-);
+        currentContentId =
+    content.contentId;
 
-console.log(
-    lesson.content.sections
-);
+    showLessonCreator();
 
-        currentLessonId =
-    lesson.contentId;
-
-console.log(
-    "Current Lesson:",
-    currentLessonId
-);
-
-    showCreateContent();
-
-    console.log(
-    "Title:",
-    lesson.title
-);
-
-console.log(
-    "Content ID:",
-    lesson.contentId
-);
 
     const area =
 
     learningAreas.find(
         area =>
             area.title ===
-            lesson.learningArea
+            content.learningArea
     );
 
 document.getElementById(
@@ -345,46 +312,34 @@ document.getElementById(
     document.getElementById(
     "lesson-theme"
 ).value =
-    lesson.themeId;
+    content.themeId;
 
     loadLessonLists();
 
     document.getElementById(
     "lesson-list"
 ).value =
-    lesson.listId;
+    content.listId;
 
     currentSections =
-    lesson.content.sections;
+    content.content.sections;
 
    renderSectionsList();
 
     document.getElementById(
-        "lesson-content-id"
+        "content-content-id"
     ).value =
-        lesson.contentId;
+        content.contentId;
 
     document.getElementById(
         "lesson-title"
     ).value =
-        lesson.title;
+        content.title;
 
         document.getElementById(
     "lesson-title"
 ).readOnly =
     true;
-
-        console.log(
-    document.getElementById(
-        "lesson-content-id"
-    ).value
-);
-
-console.log(
-    document.getElementById(
-        "lesson-title"
-    ).value
-);
 
 }
 

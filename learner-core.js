@@ -909,7 +909,7 @@ function searchContent() {
 
     }
 
-    getLearningItems().forEach(
+    getContents().forEach(
     function(item) {
 
             const matchesArea =

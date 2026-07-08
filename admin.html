@@ -220,7 +220,7 @@
                 <button class="admin-sidebar-btn" onclick="toggleSubmenu('content-submenu')">Content</button>
                 <div id="content-submenu" class="hidden">
                     <button class="sidebar-sub-btn" onclick="openAppendContentPage()">Append Content</button>
-                    <button class="sidebar-sub-btn" onclick="openLessonManagementPage()">Lesson Management</button>
+                    <button class="sidebar-sub-btn" onclick="openContentManagementPage()">Content Management</button>
                     <button class="sidebar-sub-btn" onclick="openEditVocabularyPage()">Edit Vocabulary
 
 </button>
@@ -241,6 +241,11 @@
     </div>
 
 </div>
+
+
+<!-- =========================================
+     LEARNER MANAGEMENT
+========================================= -->
 
 <div>
 
@@ -331,6 +336,153 @@
     </div>
 
 </div>
+
+</div>
+
+
+<!-- =========================================
+        AKL KNOWLEDGE HUB
+========================================= -->
+
+<div>
+
+    <button
+        class="sidebar-group-btn"
+        onclick="toggleSubmenu(
+            'knowledge-hub-submenu'
+        )">
+
+        📚 AKL Knowledge Hub
+
+    </button>
+
+    <div
+        id="knowledge-hub-submenu"
+        class="hidden">
+
+        <!-- ==========================
+                CONTENT SERIES
+        =========================== -->
+
+        <button
+            class="admin-sidebar-btn"
+            onclick="toggleSubmenu(
+                'content-series-submenu'
+            )">
+
+            Content Series
+
+        </button>
+
+        <div
+            id="content-series-submenu"
+            class="hidden">
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showCreateContentSeriesPage()">
+
+                Create Content Series
+
+            </button>
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showViewContentSeriesPage()">
+
+                View Content Series
+
+            </button>
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showManageContentSeriesPage()">
+
+                Manage Content Series
+
+            </button>
+
+        </div>
+
+        <!-- ==========================
+                CATEGORIES
+        =========================== -->
+
+        <button
+            class="admin-sidebar-btn"
+            onclick="toggleSubmenu(
+                'category-submenu'
+            )">
+
+            Categories
+
+        </button>
+
+        <div
+            id="category-submenu"
+            class="hidden">
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showCreateCategoryPage()">
+
+                Create Category
+
+            </button>
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showViewCategoriesPage()">
+
+                View Categories
+
+            </button>
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showManageCategoriesPage()">
+
+                Manage Categories
+
+            </button>
+
+        </div>
+
+        <!-- ==========================
+                ARTICLES
+        =========================== -->
+
+        <button
+            class="admin-sidebar-btn"
+            onclick="toggleSubmenu(
+                'article-submenu'
+            )">
+
+            Articles
+
+        </button>
+
+        <div
+            id="article-submenu"
+            class="hidden">
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showCreateArticlePage()">
+
+                Create Article
+
+            <button
+                class="sidebar-sub-btn"
+                onclick="showManageArticlesPage()">
+
+                Manage Articles
+
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
@@ -523,9 +675,9 @@
                 <div id="append-content-content"></div>
             </div>
 
-            <div id="lesson-management-page" class="app-page hidden">
-                <h2>Lesson Management</h2>
-                <div id="lesson-management-content"></div>
+            <div id="content-management-page" class="app-page hidden">
+                <h2>Content Management</h2>
+                <div id="content-management-content"></div>
             </div>
 
             <div id="edit-vocabulary-page" class="app-page hidden">
@@ -800,6 +952,93 @@
 
 
 <div
+    id="create-content-series-page"
+    class="app-page hidden">
+
+    <div
+        id="create-content-series-container">
+
+    </div>
+
+</div>
+
+<div
+    id="view-content-series-page"
+    class="app-page hidden">
+
+    <div
+        id="view-content-series-container">
+
+    </div>
+
+</div>
+
+<div
+    id="manage-content-series-page"
+    class="app-page hidden">
+
+    <div
+        id="manage-content-series-container">
+
+    </div>
+
+</div>
+
+<div
+    id="create-category-page"
+    class="app-page hidden">
+
+    <div
+
+    id="create-category-container">
+
+
+    </div>
+</div>
+
+<div
+    id="view-categories-page"
+    class="app-page hidden">
+
+    <div
+        id="view-categories-container">
+
+    </div>
+
+</div>
+
+<div
+    id="manage-categories-page"
+    class="app-page hidden">
+
+    <div
+        id="manage-categories-container"></div>
+</div>
+
+<div
+    id="create-article-page"
+    class="app-page hidden">
+
+    <div
+        id="create-article-container">
+
+    </div>
+
+</div>
+
+<div
+    id="manage-articles-page"
+    class="app-page hidden">
+
+    <div
+        id="manage-articles-container">
+
+    </div>
+
+</div>
+
+
+<div
     id="create-administrator-page"
     class="app-page hidden">
 
@@ -862,22 +1101,36 @@
 
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    <!-- Admin Dashboard -->
+
     <script src="admin-dashboard.js"></script>
+
     <script src="lms-courses.js"></script>
     <script src="lms-learningAreas.js"></script>
     <script src="lms-themes.js"></script>
     <script src="lms-lists.js"></script>
-    <script src="learningItems.js"></script>
+    <script src="contents.js"></script>
     <script src="lms-questions.js"></script>
-    <script src="lms-administrators.js"></script>
+    <script src="lms-administrators.js"></script> 
+    <script src="lms-learners.js"></script>
+
     <script src="globals.js"></script>
     <script src="repository.js"></script>
-    <script src="lms-learners.js"></script>
     <script src="initialize.js"></script>
     <script src="shared.js"></script>
     <script src="learner-statistics.js"></script>
     <script src="lesson-renderer.js"></script>
     <script src="lesson-editor.js"></script>
+
+    <!-- Knowledge Hub Data -->
+<script src="knowledge-series.js"></script>
+<script src="knowledge-categories.js"></script>
+<script src="knowledge-articles.js"></script>
+
+<!-- Knowledge Hub Logic -->
+    <script src="knowledge-hub.js"></script>
+
     <script src="admin-authentication.js"></script>
     <script src="admin.js"></script>
 
