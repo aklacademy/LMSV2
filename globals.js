@@ -61,7 +61,11 @@ let currentCategoryId = "";
 
 let currentArticleId = null;
 
-let articleEditMode = false;
+window.contentEditMode = false;
+
+let currentSelectedCourses = [];
+
+let currentAnalysisLevel = "";
 
 let learnerProgress = {
 

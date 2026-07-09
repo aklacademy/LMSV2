@@ -227,8 +227,6 @@ function showCreateCategoryPage() {
 
 function showCreateArticlePage() {
 
-    articleEditMode = false;
-
     showPage(
         "create-article-page"
     );
@@ -236,7 +234,6 @@ function showCreateArticlePage() {
     showCreateArticleForm();
 
 }
-
 
 /*=================================
     CREATE ARTICLE FORM
@@ -248,9 +245,8 @@ function showCreateArticleForm() {
         "create-article-container"
     ).innerHTML = `
 
-<h2>
-
-    Create Article
+<h2
+    id="article-page-title">
 
 </h2>
 
@@ -297,7 +293,6 @@ function showCreateArticleForm() {
 </option>
 
 `;
-
             }
 
         )
@@ -365,8 +360,16 @@ function showCreateArticleForm() {
 
 `;
 
-}
+document.getElementById(
+    "article-page-title"
+).textContent =
 
+    contentEditMode
+        ? "Edit Article"
+        : "Create Article";
+
+
+}
 
 function createArticle() {
 
@@ -1906,12 +1909,13 @@ articles.forEach(
 </button>
 
 <button
-    class="nav-btn">
+    class="nav-btn"
+    onclick="toggleContentStatus(${content.contentId})">
 
     ${
         content.isActive === false
-        ? "Activate"
-        : "Deactivate"
+            ? "Activate"
+            : "Deactivate"
     }
 
 </button>
@@ -1936,6 +1940,34 @@ document.getElementById(
     "article-search-results"
 ).innerHTML =
     html;
+
+}
+
+
+/*=================================
+    TOGGLE CONTENT STATUS
+==================================*/
+
+function toggleContentStatus(
+    contentId
+) {
+
+    const content =
+
+        getContentById(
+            contentId
+        );
+
+    content.isActive =
+        !content.isActive;
+
+    saveAllContents();
+
+    searchArticles();
+
+    alert(
+    "Article status updated successfully."
+);
 
 }
 

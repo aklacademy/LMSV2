@@ -313,11 +313,42 @@
 
             <button
     class="admin-sidebar-btn"
+    onclick="toggleSubmenu('learning-analytics-menu')">
+
+    Learning Analytics
+
+</button>
+
+<div
+    id="learning-analytics-menu"
+    class="hidden">
+
+    <button
+        class="sidebar-sub-btn"
+        onclick="openLearnerPerformancePage()">
+
+        Learner Performance
+
+    </button>
+
+    <button
+        class="sidebar-sub-btn"
+        onclick="openCurriculumPerformancePage()">
+
+        Curriculum Performance
+
+    </button>
+
+</div>
+
+            <button
+    class="admin-sidebar-btn"
     onclick="toggleSubmenu('progress-submenu')">
 
     Learning Progress
 
 </button>
+
 
 <div
     id="progress-submenu"
@@ -333,11 +364,15 @@
 
 </div>
 
+
+
     </div>
 
 </div>
 
 </div>
+
+
 
 
 <!-- =========================================
@@ -934,6 +969,28 @@
 </div>
 
 <div
+    id="learner-performance-page"
+    class="app-page hidden">
+
+    <div
+        id="learner-performance-container">
+
+    </div>
+
+</div>
+
+<div
+    id="curriculum-performance-page"
+    class="app-page hidden">
+
+    <div
+        id="curriculum-performance-container">
+
+    </div>
+
+</div>
+
+<div
     id="reset-progress-page"
     class="app-page hidden">
 
@@ -1099,40 +1156,45 @@
         </div> <!-- /main-content -->
     </div> <!-- /course-page -->
 
-    <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+   <!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
-    <!-- Admin Dashboard -->
+<!-- Admin Dashboard -->
+<script src="admin-dashboard.js"></script>
 
-    <script src="admin-dashboard.js"></script>
+<!-- LMS Data -->
+<script src="lms-courses.js"></script>
+<script src="lms-learningAreas.js"></script>
+<script src="lms-themes.js"></script>
+<script src="lms-lists.js"></script>
+<script src="contents.js"></script>
+<script src="lms-questions.js"></script>
+<script src="lms-administrators.js"></script>
+<script src="lms-learners.js"></script>
 
-    <script src="lms-courses.js"></script>
-    <script src="lms-learningAreas.js"></script>
-    <script src="lms-themes.js"></script>
-    <script src="lms-lists.js"></script>
-    <script src="contents.js"></script>
-    <script src="lms-questions.js"></script>
-    <script src="lms-administrators.js"></script> 
-    <script src="lms-learners.js"></script>
+<!-- Core -->
+<script src="globals.js"></script>
+<script src="repository.js"></script>
+<script src="initialize.js"></script>
+<script src="shared.js"></script>
 
-    <script src="globals.js"></script>
-    <script src="repository.js"></script>
-    <script src="initialize.js"></script>
-    <script src="shared.js"></script>
-    <script src="learner-statistics.js"></script>
-    <script src="lesson-renderer.js"></script>
-    <script src="lesson-editor.js"></script>
+<!-- Learning -->
+<script src="learner-statistics.js"></script>
+<script src="lesson-renderer.js"></script>
+<script src="lesson-editor.js"></script>
 
-    <!-- Knowledge Hub Data -->
+<!-- Knowledge Hub -->
 <script src="knowledge-series.js"></script>
 <script src="knowledge-categories.js"></script>
 <script src="knowledge-articles.js"></script>
+<script src="knowledge-hub.js"></script>
 
-<!-- Knowledge Hub Logic -->
-    <script src="knowledge-hub.js"></script>
+<!-- Performance -->
+<script src="performance.js"></script>
 
-    <script src="admin-authentication.js"></script>
-    <script src="admin.js"></script>
+<!-- Admin -->
+<script src="admin-authentication.js"></script>
+<script src="admin.js"></script>
 
 </body>
 </html>
