@@ -3650,6 +3650,8 @@ document.getElementById(
 
 function appendAssessmentQuestions() {
 
+    const invalidContentIds = [];
+
     if (
     !uploadQuestionRows ||
     uploadQuestionRows.length === 0
@@ -3807,6 +3809,33 @@ if (existingQuestion) {
     return;
 }
 
+const content =
+
+    getContentById(
+        Number(
+            row.Content_ID
+        )
+    );
+
+if (
+
+    !content ||
+
+    content.listId !==
+    list.listId
+
+) {
+
+    invalidCount++;
+
+    invalidContentIds.push(
+        row.Content_ID
+    );
+
+    return;
+
+}
+
             const question = {
 
 
@@ -3829,7 +3858,9 @@ if (existingQuestion) {
                     list.title,
 
                 contentId:
-                    row.Content_ID,
+    Number(
+        row.Content_ID
+    ),
 
                 questionType:
                     row.Question_Type,
@@ -3922,6 +3953,22 @@ ${duplicateCount}
 
 Invalid:
 ${invalidCount}
+
+${
+    invalidContentIds.length > 0
+
+    ?
+
+    `<br><br>
+
+    Invalid Content IDs:
+
+    ${invalidContentIds.join(", ")}`
+
+    :
+
+    ""
+}
 
 </p>
 

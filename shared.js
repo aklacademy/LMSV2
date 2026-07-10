@@ -978,3 +978,605 @@ function getCategoryById(
     );
 
 }
+
+/*=================================
+    PERFORMANCE DATA HELPERS
+===================================*/
+
+function performanceGetAssignedLists() {
+
+    const assignedLists = [];
+
+    currentSelectedCourses.forEach(
+
+        function(courseId) {
+
+            const course =
+
+                getCourseById(
+                    courseId
+                );
+
+            assignedLists.push(
+
+                ...course.assignedLists
+
+            );
+
+        }
+
+    );
+
+    return assignedLists;
+
+}
+
+function performanceGetContents() {
+
+    const assignedLists =
+
+        performanceGetAssignedLists();
+
+    const contents =
+
+        getContents();
+
+    const selectedContents =
+
+        contents.filter(
+
+            function(content) {
+
+                return (
+
+                    assignedLists.includes(
+                        content.listId
+                    )
+
+                );
+
+            }
+
+        );
+
+    return selectedContents;
+
+}
+
+/*=================================
+    ATTEMPT HISTORY
+===================================*/
+
+function performanceGetAttemptHistory(
+    learnerId
+) {
+
+    const learnerProgress =
+
+        getLearnerProgressById(
+            learnerId
+        );
+
+    const attemptHistory = [];
+
+    if (
+        !learnerProgress
+        ||
+        !learnerProgress.lists
+    ) {
+
+        return attemptHistory;
+
+    }
+
+    Object.values(
+
+        learnerProgress.lists
+
+    ).forEach(
+
+        function(listProgress) {
+
+            if (
+
+                listProgress.attemptHistory
+
+            ) {
+
+                attemptHistory.push(
+
+                    ...listProgress.attemptHistory
+
+                );
+
+            }
+
+        }
+
+    );
+
+    return attemptHistory;
+
+}
+
+/*=================================
+    Performance Calculation Helpers
+===================================*/
+
+/*=================================
+    CONTENT SUMMARY
+===================================*/
+
+function performanceBuildContentSummary(
+
+    learnerId
+
+) {
+
+    const attemptHistory =
+
+        performanceGetAttemptHistory(
+
+            learnerId
+
+        );
+
+    const contentSummary = {};
+
+attemptHistory.forEach(
+
+    function(attempt) {
+
+        if (
+
+            !contentSummary[
+                attempt.contentId
+            ]
+
+        ) {
+
+            contentSummary[
+    attempt.contentId
+] = {
+
+    contentId:
+        attempt.contentId,
+
+    totalQuestions: 0,
+
+    correctQuestions: 0,
+
+    incorrectQuestions: 0
+
+};
+
+        }
+
+        contentSummary[
+            attempt.contentId
+        ].totalQuestions++;
+
+        if (
+
+            attempt.isCorrect
+
+        ) {
+
+            contentSummary[
+                attempt.contentId
+            ].correctQuestions++;
+
+        }
+
+        else {
+
+    contentSummary[
+        attempt.contentId
+    ].incorrectQuestions++;
+
+}
+
+    }
+
+);
+
+Object.values(
+
+    contentSummary
+
+).forEach(
+
+    function(content) {
+
+        content.passedFirstTime =
+
+            content.correctQuestions
+            ===
+            content.totalQuestions;
+
+        content.defective =
+
+            !content.passedFirstTime;
+
+    }
+
+);
+
+return contentSummary;
+
+}
+
+/*=================================
+    ATTEMPTED CONTENTS
+===================================*/
+
+function performanceGetAttemptedContents(
+
+    contentSummary
+
+) {
+
+  return Object.values(
+
+    contentSummary
+
+);
+
+}
+
+/*=================================
+    PASSED FIRST TIME CONTENTS
+===================================*/
+
+function performanceGetPassedFirstTimeContents(
+
+    contentSummary
+
+) {
+
+    const attemptedContents =
+
+    performanceGetAttemptedContents(
+
+        contentSummary
+
+    );
+
+    return attemptedContents.filter(
+
+        function(content) {
+
+            return (
+
+                content.passedFirstTime
+
+            );
+
+        }
+
+    );
+
+}
+
+/*=================================
+    DEFECTIVE CONTENTS
+===================================*/
+
+function performanceGetDefectiveContents(
+
+    contentSummary
+
+) {
+
+    const attemptedContents =
+
+        performanceGetAttemptedContents(
+
+            contentSummary
+
+        );
+
+    return attemptedContents.filter(
+
+        function(content) {
+
+            return (
+
+                content.defective
+
+            );
+
+        }
+
+    );
+
+}
+
+/*=================================
+    FIRST TIME YIELD (FTY)
+===================================*/
+
+function performanceCalculateFTY(
+
+    contentSummary
+
+) {
+
+    const attemptedContents =
+
+        performanceGetAttemptedContents(
+
+            contentSummary
+
+        );
+
+    const passedFirstTimeContents =
+
+        performanceGetPassedFirstTimeContents(
+
+            contentSummary
+
+        );
+
+    if (
+
+        attemptedContents.length === 0
+
+    ) {
+
+        return 0;
+
+    }
+
+    return Math.round(
+
+        (
+
+            passedFirstTimeContents.length
+
+            /
+
+            attemptedContents.length
+
+        ) * 100
+
+    );
+
+}
+
+function performanceCalculateCorrect() {
+
+}
+
+function performanceCalculateClose() {
+
+}
+
+function performanceCalculateIrrelevant() {
+
+}
+
+
+/*=================================
+    QUESTION PERFORMANCE HELPERS
+===================================*/
+
+/*=================================
+    QUESTIONS
+===================================*/
+
+function performanceGetQuestions() {
+
+    const selectedLists =
+
+        performanceGetAssignedLists();
+
+    return getAssessmentQuestions().filter(
+
+        function(question) {
+
+            return (
+
+                selectedLists.includes(
+                    question.listId
+                )
+
+            );
+
+        }
+
+    );
+
+}
+
+/*=================================
+    ATTEMPTED QUESTIONS
+===================================*/
+
+function performanceGetAttemptedQuestions(
+
+    questionSummary
+
+) {
+
+    return Object.values(
+
+        questionSummary
+
+    );
+
+}
+
+/*=================================
+    CORRECT ANSWERS
+===================================*/
+
+function performanceGetCorrectAnswers(
+
+    questionSummary
+
+) {
+
+    const attemptedQuestions =
+
+        performanceGetAttemptedQuestions(
+
+            questionSummary
+
+        );
+
+    return attemptedQuestions.filter(
+
+        function(question) {
+
+            return question.isCorrect;
+
+        }
+
+    );
+
+}
+
+/*=================================
+    INCORRECT ANSWERS
+===================================*/
+
+function performanceGetIncorrectAnswers(
+
+    questionSummary
+
+) {
+
+    const attemptedQuestions =
+
+        performanceGetAttemptedQuestions(
+
+            questionSummary
+
+        );
+
+    return attemptedQuestions.filter(
+
+        function(question) {
+
+            return !question.isCorrect;
+
+        }
+
+    );
+
+}
+
+/*=================================
+    ACCURACY
+===================================*/
+
+function performanceCalculateAccuracy(
+
+    questionSummary
+
+) {
+
+    const attemptedQuestions =
+
+        performanceGetAttemptedQuestions(
+
+            questionSummary
+
+        );
+
+    const correctAnswers =
+
+        performanceGetCorrectAnswers(
+
+            questionSummary
+
+        );
+
+    if (
+
+        attemptedQuestions.length === 0
+
+    ) {
+
+        return 0;
+
+    }
+
+    return Math.round(
+
+        (
+
+            correctAnswers.length
+
+            /
+
+            attemptedQuestions.length
+
+        ) * 100
+
+    );
+
+}
+
+
+/*=================================
+    QUESTION SUMMARY
+===================================*/
+
+function performanceBuildQuestionSummary(
+
+    learnerId
+
+) {
+
+    const attemptHistory =
+
+    performanceGetAttemptHistory(
+
+        learnerId
+
+    );
+
+const questionSummary = {};
+
+attemptHistory.forEach(
+
+    function(attempt) {
+
+        questionSummary[
+            attempt.questionId
+        ] = {
+
+            questionId:
+                attempt.questionId,
+
+            contentId:
+                attempt.contentId,
+
+            isCorrect:
+                attempt.isCorrect
+
+        };
+
+    }
+
+);
+
+return questionSummary;
+
+}
+
+/*=================================
+    LEARNING PROGRESS SUMMARY
+===================================*/
+
+function performanceBuildLearningProgressSummary(
+
+    learnerId
+
+) {
+
+
+
+}

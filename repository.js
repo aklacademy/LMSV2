@@ -275,7 +275,7 @@ function saveAllLearners() {
 
 function getAdministrators() {
 
-    return admins;
+    return administrators;
 
 }
 
@@ -343,7 +343,7 @@ function saveAllAdministrators() {
     localStorage.setItem(
         "admins",
         JSON.stringify(
-            admins
+            administrators
         )
     );
 
@@ -1334,7 +1334,7 @@ function loadAllAdministrators() {
 
     else {
 
-        saveAllAdmins();
+        saveAllAdministrators();
 
     }
 

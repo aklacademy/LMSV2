@@ -3,19 +3,7 @@
 ===================================*/
 
 
-/*=================================
-    LEARNER PERFORMANCE
-==================================*/
 
-function openLearnerPerformancePage() {
-
-    showPage(
-        "learner-performance-page"
-    );
-
-    showLearnerPerformance();
-
-}
 
 
 /*=================================
@@ -110,6 +98,273 @@ function searchLearnerForPerformance() {
     showPerformanceCourseSelection(
         learnerId
     );
+
+}
+
+
+
+/*=================================
+    SELECT ALL COURSES
+===================================*/
+
+function performanceToggleSelectAllCourses(
+
+    checkbox
+
+) {
+
+    const courseCheckboxes =
+
+        document.querySelectorAll(
+
+'#performance-results input[type="checkbox"][value]'
+
+        );
+
+    courseCheckboxes.forEach(
+
+        function(courseCheckbox) {
+
+            courseCheckbox.checked =
+
+                checkbox.checked;
+
+        }
+
+    );
+
+}
+
+
+/*=================================
+    ANALYSIS LEVEL
+===================================*/
+
+function performanceContinueToAnalysisLevel(
+    learnerId
+) {
+
+    currentSelectedCourses =
+
+    performanceGetSelectedCourses();
+
+    document.getElementById(
+        "performance-results"
+    ).innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+
+Select Analysis Level
+
+</h3>
+
+<label>
+
+<input
+    type="radio"
+    name="analysis-level"
+    value="course"
+    checked>
+
+Overall Course
+
+</label>
+
+<br><br>
+
+<label>
+
+<input
+    type="radio"
+    name="analysis-level"
+    value="learning-area">
+
+Learning Area
+
+</label>
+
+<br><br>
+
+<label>
+
+<input
+    type="radio"
+    name="analysis-level"
+    value="theme">
+
+Theme
+
+</label>
+
+<br><br>
+
+<label>
+
+<input
+    type="radio"
+    name="analysis-level"
+    value="lists">
+
+Selected Lists
+
+</label>
+
+<br><br>
+
+<button
+    class="nav-btn"
+    onclick="
+        performanceContinueAnalysis(
+            '${learnerId}'
+        )
+    ">
+
+    Continue
+
+</button>
+
+</div>
+
+`;
+
+}
+
+function performanceContinueAnalysis(
+    learnerId
+) {
+
+    currentAnalysisLevel =
+
+    document.querySelector(
+        'input[name="analysis-level"]:checked'
+    ).value;
+
+    const analysisLevel =
+
+        document.querySelector(
+            'input[name="analysis-level"]:checked'
+        ).value;
+
+    switch (
+        analysisLevel
+    ) {
+
+        case "course":
+
+            showOverallCourseReport(
+                learnerId
+            );
+
+            break;
+
+        case "learning-area":
+
+            showPerformanceLearningAreas(
+                learnerId
+            );
+
+            break;
+
+        case "theme":
+
+            showPerformanceThemes(
+                learnerId
+            );
+
+            break;
+
+        case "lists":
+
+            showPerformanceLists(
+                learnerId
+            );
+
+            break;
+
+    }
+
+}
+
+
+function showPerformanceLearningAreas(
+    learnerId
+) {
+
+}
+
+function showPerformanceThemes(
+    learnerId
+) {
+
+}
+
+function showPerformanceLists(
+    learnerId
+) {
+
+}
+
+
+/*=================================
+    SELECTED COURSES
+===================================*/
+
+function performanceGetSelectedCourses() {
+
+    const selectedCourses = [];
+
+    const checkboxes =
+
+        document.querySelectorAll(
+
+'#performance-results input[type="checkbox"][value]'
+
+        );
+
+    checkboxes.forEach(
+
+        function(checkbox) {
+
+            if (
+
+                checkbox.checked
+
+            ) {
+
+                selectedCourses.push(
+
+                    checkbox.value
+
+                );
+
+            }
+
+        }
+
+    );
+
+    return selectedCourses;
+
+}
+
+
+
+/*=================================
+UI FUNCTIONS
+=================================*/
+/*=================================
+    LEARNER PERFORMANCE
+==================================*/
+
+function openLearnerPerformancePage() {
+
+    showPage(
+        "learner-performance-page"
+    );
+
+    showLearnerPerformance();
 
 }
 
@@ -224,198 +479,6 @@ ${courseOptions}
 }
 
 /*=================================
-    SELECT ALL COURSES
-===================================*/
-
-function performanceToggleSelectAllCourses(
-
-    checkbox
-
-) {
-
-    const courseCheckboxes =
-
-        document.querySelectorAll(
-
-'#performance-results input[type="checkbox"][value]'
-
-        );
-
-    courseCheckboxes.forEach(
-
-        function(courseCheckbox) {
-
-            courseCheckbox.checked =
-
-                checkbox.checked;
-
-        }
-
-    );
-
-}
-
-
-/*=================================
-    ANALYSIS LEVEL
-===================================*/
-
-function performanceContinueToAnalysisLevel(
-    learnerId
-) {
-
-    currentSelectedCourses =
-
-    performanceGetSelectedCourses();
-
-console.log(
-    currentSelectedCourses
-);
-
-    document.getElementById(
-        "performance-results"
-    ).innerHTML = `
-
-<div class="dashboard-card">
-
-<h3>
-
-Select Analysis Level
-
-</h3>
-
-<label>
-
-<input
-    type="radio"
-    name="analysis-level"
-    value="course"
-    checked>
-
-Overall Course
-
-</label>
-
-<br><br>
-
-<label>
-
-<input
-    type="radio"
-    name="analysis-level"
-    value="learning-area">
-
-Learning Area
-
-</label>
-
-<br><br>
-
-<label>
-
-<input
-    type="radio"
-    name="analysis-level"
-    value="theme">
-
-Theme
-
-</label>
-
-<br><br>
-
-<label>
-
-<input
-    type="radio"
-    name="analysis-level"
-    value="lists">
-
-Selected Lists
-
-</label>
-
-<br><br>
-
-<button
-    class="nav-btn"
-    onclick="
-        performanceContinueAnalysis(
-            '${learnerId}'
-        )
-    ">
-
-    Continue
-
-</button>
-
-</div>
-
-`;
-
-}
-
-function performanceContinueAnalysis(
-    learnerId
-) {
-
-    currentAnalysisLevel =
-
-    document.querySelector(
-        'input[name="analysis-level"]:checked'
-    ).value;
-
-console.log(
-    currentAnalysisLevel
-);
-
-    const analysisLevel =
-
-        document.querySelector(
-            'input[name="analysis-level"]:checked'
-        ).value;
-
-    switch (
-        analysisLevel
-    ) {
-
-        case "course":
-
-            showOverallCourseReport(
-                learnerId
-            );
-
-            break;
-
-        case "learning-area":
-
-            showPerformanceLearningAreas(
-                learnerId
-            );
-
-            break;
-
-        case "theme":
-
-            showPerformanceThemes(
-                learnerId
-            );
-
-            break;
-
-        case "lists":
-
-            showPerformanceLists(
-                learnerId
-            );
-
-            break;
-
-    }
-
-}
-
-/*=================================
     OVERALL COURSE REPORT
 ===================================*/
 
@@ -423,11 +486,23 @@ function showOverallCourseReport(
     learnerId
 ) {
 
+    const contentSummary =
+
+    performanceBuildContentSummary(
+
+        learnerId
+
+    );
+
     const learner =
 
     getLearnerById(
         learnerId
     );
+
+    const contents =
+
+    performanceGetContents();
 
     const selectedCourseTitles =
 
@@ -440,6 +515,83 @@ function showOverallCourseReport(
             ).title;
 
         }
+
+    );
+
+    const attemptedContents =
+
+    performanceGetAttemptedContents(
+
+        contentSummary
+
+    );
+
+    const passedFirstTimeContents =
+
+    performanceGetPassedFirstTimeContents(
+
+        contentSummary
+
+    );
+
+const defectiveContents =
+
+    performanceGetDefectiveContents(
+
+        contentSummary
+
+    );
+
+const fty =
+
+    performanceCalculateFTY(
+
+        contentSummary
+
+    );
+
+    const questions =
+
+    performanceGetQuestions();
+
+
+    const questionSummary =
+
+    performanceBuildQuestionSummary(
+
+        learnerId
+
+    );
+
+const attemptedQuestions =
+
+    performanceGetAttemptedQuestions(
+
+        questionSummary
+
+    );
+
+const correctAnswers =
+
+    performanceGetCorrectAnswers(
+
+        questionSummary
+
+    );
+
+const incorrectAnswers =
+
+    performanceGetIncorrectAnswers(
+
+        questionSummary
+
+    );
+
+const accuracy =
+
+    performanceCalculateAccuracy(
+
+        questionSummary
 
     );
 
@@ -491,69 +643,161 @@ function showOverallCourseReport(
 
 </p>
 
+<hr>
+
+<h3>
+
+Performance Summary
+
+</h3>
+
+<p>
+
+<strong>
+
+Total Content IDs:
+
+</strong>
+
+${contents.length}
+
+</p>
+
+<p>
+
+<strong>
+
+Attempted Contents:
+
+</strong>
+
+${attemptedContents.length}
+
+</p>
+
+<p>
+
+<strong>
+
+Passed First Time:
+
+</strong>
+
+${passedFirstTimeContents.length}
+
+</p>
+
+<p>
+
+<strong>
+
+Defective Contents:
+
+</strong>
+
+${defectiveContents.length}
+
+</p>
+
+<p>
+
+<strong>
+
+First Time Yield (FTY):
+
+</strong>
+
+${fty}%
+
+</p>
+
+<hr>
+
+<h3>
+
+Question Summary
+
+</h3>
+
+<p>
+
+<strong>
+
+Total Questions:
+
+</strong>
+
+${questions.length}
+
+</p>
+
+<p>
+
+<strong>
+
+Attempted Questions:
+
+</strong>
+
+${attemptedQuestions.length}
+
+</p>
+
+<p>
+
+<strong>
+
+Correct Answers:
+
+</strong>
+
+${correctAnswers.length}
+
+</p>
+
+<p>
+
+<strong>
+
+Incorrect Answers:
+
+</strong>
+
+${incorrectAnswers.length}
+
+</p>
+
+<p>
+
+<strong>
+
+Accuracy:
+
+</strong>
+
+${accuracy}%
+
+</p>
+
 </div>
 
 `;
 
 }
 
-function showPerformanceLearningAreas(
-    learnerId
-) {
-
-}
-
-function showPerformanceThemes(
-    learnerId
-) {
-
-}
-
-function showPerformanceLists(
-    learnerId
-) {
-
-}
-
 
 /*=================================
-    SELECTED COURSES
-===================================*/
+DATA HELPERS
+=================================
 
-function performanceGetSelectedCourses() {
+=================================
+CALCULATION HELPERS
+=================================
 
-    const selectedCourses = [];
+=================================
+REPORT HELPERS
+=================================
 
-    const checkboxes =
-
-        document.querySelectorAll(
-
-'#performance-results input[type="checkbox"][value]'
-
-        );
-
-    checkboxes.forEach(
-
-        function(checkbox) {
-
-            if (
-
-                checkbox.checked
-
-            ) {
-
-                selectedCourses.push(
-
-                    checkbox.value
-
-                );
-
-            }
-
-        }
-
-    );
-
-    return selectedCourses;
-
-}
+=================================
+UTILITY FUNCTIONS
+=================================*/
