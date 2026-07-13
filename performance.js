@@ -595,6 +595,465 @@ const accuracy =
 
     );
 
+    const answerQualitySummary =
+
+    performanceBuildAnswerQualitySummary(
+
+        questionSummary
+
+    );
+
+const defectCauseSummary =
+
+    performanceBuildDefectCauseSummary(
+
+        answerQualitySummary
+
+    );
+
+const contentDefectCauseSummary =
+
+    performanceBuildContentDefectCauseSummary(
+
+        answerQualitySummary
+
+    );
+
+const contentInterventionPlan =
+
+    performanceBuildContentInterventionPlan(
+
+        contentDefectCauseSummary
+
+    );
+
+
+
+const defectCauseFeedback =
+
+    performanceGenerateDefectCauseFeedback(
+
+        defectCauseSummary
+
+    );
+
+const learningAreaQualityProfile =
+
+    performanceBuildLearningAreaQualityProfile(
+
+        answerQualitySummary
+
+    );
+
+const answerQualityHTML =
+
+    learningAreaQualityProfile.map(
+
+        function(profile) {
+
+            return `
+
+<div class="dashboard-card">
+
+<h4>
+
+    ${profile.learningArea}
+
+</h4>
+
+<p>
+
+    <strong>
+
+        Correct:
+
+    </strong>
+
+    ${profile.correctPercent}%
+
+</p>
+
+<p>
+
+    <strong>
+
+        Close:
+
+    </strong>
+
+    ${profile.closePercent}%
+
+</p>
+
+<p>
+
+    <strong>
+
+        Less Relevant:
+
+    </strong>
+
+    ${profile.lessRelevantPercent}%
+
+</p>
+
+<p>
+
+    <strong>
+
+        Irrelevant:
+
+    </strong>
+
+    ${profile.irrelevantPercent}%
+
+</p>
+
+<p>
+
+    <strong>
+
+        Teacher Insight:
+
+    </strong>
+
+    ${profile.feedback}
+
+</p>
+
+</div>
+
+`;
+
+        }
+
+    ).join("");
+
+
+const learningProgressSummary =
+
+    performanceBuildLearningProgressSummary(
+
+        learnerId,
+
+        currentSelectedCourses
+
+    );
+
+const learningCompletion =
+
+    performanceCalculateLearningCompletion(
+
+        learningProgressSummary
+
+    );
+
+const masteryCompletion =
+
+    performanceCalculateMasteryCompletion(
+
+        learningProgressSummary
+
+    );
+
+const assessmentCompletion =
+
+    performanceCalculateAssessmentCompletion(
+
+        questions.length,
+
+        attemptedQuestions.length
+
+    );
+
+const sixSigmaSummary =
+
+    performanceBuildSixSigmaSummary(
+
+        contentSummary,
+
+        questionSummary
+
+    );
+
+const dpu =
+
+    performanceCalculateDPU(
+
+        sixSigmaSummary
+
+    );
+
+const dpo =
+
+    performanceCalculateDPO(
+
+        sixSigmaSummary
+
+    );
+
+const dpmo =
+
+    performanceCalculateDPMO(
+
+        dpo
+
+    );
+
+
+const sigmaLevel =
+
+    performanceCalculateSigmaLevel(
+
+        dpo
+
+    );
+
+const defectSummary =
+
+    performanceBuildDefectSummary(
+
+        questionSummary
+
+    );
+
+const defectsByContent =
+
+    performanceGroupDefectsByField(
+
+        defectSummary,
+
+        "contentId"
+
+    );
+
+const paretoAnalysis =
+
+    performanceBuildParetoAnalysis(
+
+        defectsByContent
+
+    );
+
+const paretoPriorityContents =
+
+    performanceGetParetoPriorityContents(
+
+        paretoAnalysis
+
+    );
+
+const priorityInterventionPlan =
+
+    performanceBuildPriorityInterventionPlan(
+
+        contentInterventionPlan,
+
+        paretoPriorityContents
+
+    );
+
+const interventionPriorityScores =
+
+    performanceBuildInterventionPriorityScore(
+
+        priorityInterventionPlan
+
+    );
+
+const prioritisedInterventionPlan =
+
+    performanceSortInterventionPlan(
+
+        interventionPriorityScores
+
+    );
+
+const rankedInterventionPlan =
+
+    performanceAssignInterventionRanks(
+
+        prioritisedInterventionPlan
+
+    );
+
+const interventionSummary =
+
+    performanceGenerateInterventionSummary(
+
+        rankedInterventionPlan
+
+    );
+
+console.log(
+
+    interventionSummary
+
+);
+
+const paretoDisplayData =
+
+    performanceBuildParetoDisplayData(
+
+        paretoAnalysis
+
+    );
+
+const paretoPriorityDisplayData =
+
+    performanceBuildParetoDisplayData(
+
+        paretoPriorityContents
+
+    );
+
+const paretoFeedback =
+
+    performanceGenerateParetoFeedback(
+
+        paretoAnalysis,
+
+        paretoPriorityContents
+
+    );
+
+const paretoHTML =
+
+    paretoDisplayData.map(
+
+        function(item) {
+
+            return `
+
+<tr>
+
+<td>
+
+    ${item.contentTitle}
+
+</td>
+
+<td>
+
+    ${item.defectCount}
+
+</td>
+
+<td>
+
+    ${item.defectPercent}%
+
+</td>
+
+<td>
+
+    ${item.cumulativePercent}%
+
+</td>
+
+</tr>
+
+`;
+
+        }
+
+
+
+    ).join(""); 
+
+const paretoPriorityHTML =
+
+    paretoPriorityDisplayData.map(
+
+        function(item) {
+
+            return `
+
+<tr>
+
+<td>
+
+    ${item.contentTitle}
+
+</td>
+
+<td>
+
+    ${item.contentType}
+
+</td>
+
+<td>
+
+    ${item.defectCount}
+
+</td>
+
+</tr>
+
+`;
+
+        }
+
+    ).join("");
+
+const defectsByTheme =
+
+    performanceGroupDefectsByField(
+
+        defectSummary,
+
+        "themeTitle"
+
+    );
+
+
+const defectsByList =
+
+    performanceGroupDefectsByField(
+
+        defectSummary,
+
+        "listTitle"
+
+    );
+
+
+const defectsBySet =
+
+    performanceGroupDefectsByField(
+
+        defectSummary,
+
+        "setName"
+
+    );
+
+
+const defectsByBloom =
+
+    performanceGroupDefectsByField(
+
+        defectSummary,
+
+        "bloomLevel"
+
+    );
+
+
+const defectsByDifficulty =
+
+    performanceGroupDefectsByField(
+
+        defectSummary,
+
+        "difficultyLevel"
+
+    );
+
+
+
+
     document.getElementById(
         "performance-results"
     ).innerHTML = `
@@ -778,6 +1237,203 @@ Accuracy:
 ${accuracy}%
 
 </p>
+
+<hr>
+
+<h3>
+
+Learning Progress
+
+</h3>
+
+<p>
+
+<strong>
+
+Assigned Lists:
+
+</strong>
+
+${learningProgressSummary.assignedLists}
+
+</p>
+
+<p>
+
+<strong>
+
+Learned Lists:
+
+</strong>
+
+${learningProgressSummary.learnedLists}
+
+</p>
+
+<p>
+
+<strong>
+
+Mastered Lists:
+
+</strong>
+
+${learningProgressSummary.masteredLists}
+
+</p>
+
+<p>
+
+<strong>
+
+Learning Completion:
+
+</strong>
+
+${learningCompletion}%
+
+</p>
+
+<p>
+
+<strong>
+
+Mastery Completion:
+
+</strong>
+
+${masteryCompletion}%
+
+</p>
+
+<p>
+
+<strong>
+
+Assessment Completion:
+
+</strong>
+
+${assessmentCompletion}%
+
+</p>
+
+<hr>
+
+<h3>
+
+    Answer Quality Profile
+
+</h3>
+
+${answerQualityHTML}
+
+<hr>
+
+<h3>
+
+    Pareto Analysis
+
+</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+    Content
+
+</th>
+
+<th>
+
+    Defects
+
+</th>
+
+<th>
+
+    Defect %
+
+</th>
+
+<th>
+
+    Cumulative %
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+    ${paretoHTML}
+
+</tbody>
+
+</table>
+
+<h4>
+
+    Pareto Insight
+
+</h4>
+
+<p>
+
+    ${paretoFeedback}
+
+</p>
+
+<h4>
+
+    Priority Content
+
+</h4>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+
+    Content
+
+</th>
+
+<th>
+
+    Content Type
+
+</th>
+
+<th>
+
+    Defects
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+    ${paretoPriorityHTML}
+
+</tbody>
+
+</table>
+
+
+
 
 </div>
 
