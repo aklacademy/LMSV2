@@ -923,9 +923,6 @@ messageBox.value =
 currentCourseEditing =
     courseId;
 
-    console.log(
-    course.assignedLists
-);
 
 document.getElementById(
     "course-lists-container"
@@ -3726,7 +3723,17 @@ function appendAssessmentQuestions() {
 
     ||
 
+    !row.Option_A_Classification
+        ?.trim()
+
+    ||
+
     !row.Option_B?.trim()
+
+    ||
+
+    !row.Option_B_Classification
+        ?.trim()
 
     ||
 
@@ -3734,7 +3741,17 @@ function appendAssessmentQuestions() {
 
     ||
 
+    !row.Option_C_Classification
+        ?.trim()
+
+    ||
+
     !row.Option_D?.trim()
+
+    ||
+
+    !row.Option_D_Classification
+        ?.trim()
 
     ||
 
@@ -3745,6 +3762,100 @@ function appendAssessmentQuestions() {
     invalidCount++;
 
     return;
+
+}
+
+const validClassifications = [
+
+    "correct",
+
+    "close",
+
+    "less relevant",
+
+    "irrelevant"
+
+];
+
+const classifications = [
+
+    row.Option_A_Classification
+        .trim()
+        .toLowerCase(),
+
+    row.Option_B_Classification
+        .trim()
+        .toLowerCase(),
+
+    row.Option_C_Classification
+        .trim()
+        .toLowerCase(),
+
+    row.Option_D_Classification
+        .trim()
+        .toLowerCase()
+
+];
+
+const hasInvalidClassification =
+
+    classifications.some(
+
+        function(classification) {
+
+            return (
+
+                !validClassifications.includes(
+
+                    classification
+
+                )
+
+            );
+
+        }
+
+    );
+
+if (
+
+    hasInvalidClassification
+
+) {
+
+    invalidCount++;
+
+    return;
+
+}
+
+const correctClassificationCount =
+
+    classifications.filter(
+
+        function(classification) {
+
+            return (
+
+                classification ===
+                "correct"
+
+            );
+
+        }
+
+    ).length;
+
+if (
+
+    correctClassificationCount !== 1
+
+) {
+
+    invalidCount++;
+
+    return;
+
 }
 
 
@@ -3777,6 +3888,45 @@ if (
     invalidCount++;
 
     return;
+}
+
+const correctOptionIndex =
+
+    classifications.findIndex(
+
+        function(classification) {
+
+            return (
+
+                classification ===
+                "correct"
+
+            );
+
+        }
+
+    );
+
+const classifiedCorrectAnswer =
+
+    options[
+        correctOptionIndex
+    ];
+
+if (
+
+    classifiedCorrectAnswer
+
+    !==
+
+    row.Correct_Answer.trim()
+
+) {
+
+    invalidCount++;
+
+    return;
+
 }
 
 const existingQuestion =
@@ -3895,6 +4045,34 @@ if (
 
 ],
 
+answerClassifications: {
+
+    [row.Option_A.trim()]:
+
+        row.Option_A_Classification
+            .trim()
+            .toLowerCase(),
+
+    [row.Option_B.trim()]:
+
+        row.Option_B_Classification
+            .trim()
+            .toLowerCase(),
+
+    [row.Option_C.trim()]:
+
+        row.Option_C_Classification
+            .trim()
+            .toLowerCase(),
+
+    [row.Option_D.trim()]:
+
+        row.Option_D_Classification
+            .trim()
+            .toLowerCase()
+
+},
+
                 correctAnswer:
                     row.Correct_Answer.trim(),
 
@@ -3973,10 +4151,6 @@ ${
 </p>
 
 `
-    );
-
-    console.log(
-        assessmentQuestions
     );
 
 }
