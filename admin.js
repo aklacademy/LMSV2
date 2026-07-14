@@ -3645,6 +3645,96 @@ document.getElementById(
 
 }
 
+/*======================================
+    Check Assessment Set Attempted
+========================================*/
+
+function isAssessmentSetAttempted(
+    listId,
+    setName
+) {
+
+    return Object.values(
+        learnerProgress
+    ).some(function(learnerData) {
+
+        if (
+            !learnerData
+            ||
+            !learnerData.lists
+        ) {
+
+            return false;
+
+        }
+
+        const listProgress =
+            learnerData.lists[listId];
+
+        if (!listProgress) {
+
+            return false;
+
+        }
+
+        const attemptHistory =
+            listProgress.attemptHistory || [];
+
+        return attemptHistory.some(
+            function(attempt) {
+
+                return (
+                    attempt.setName
+                    === setName
+                );
+
+            }
+        );
+
+    });
+
+}
+
+/*======================================
+    Invalidate List Mastery
+========================================*/
+
+function invalidateListMastery(
+    listId
+) {
+
+    Object.values(
+        learnerProgress
+    ).forEach(function(learnerData) {
+
+        if (
+            !learnerData
+            ||
+            !learnerData.lists
+        ) {
+
+            return;
+
+        }
+
+        const listProgress =
+            learnerData.lists[listId];
+
+        if (!listProgress) {
+
+            return;
+
+        }
+
+        listProgress.mastered =
+            false;
+
+    });
+
+    saveLearnerProgress();
+
+}
+
 function appendAssessmentQuestions() {
 
     const invalidContentIds = [];
@@ -3710,8 +3800,39 @@ function appendAssessmentQuestions() {
 
         let invalidCount = 0;
 
+        const lockedSetNames = [];
+
     uploadQuestionRows.forEach(
         function(row) {
+
+            const rowSetName =
+            row.Set_Name
+                ?.trim();
+
+        if (
+            rowSetName
+            &&
+            isAssessmentSetAttempted(
+                list.listId,
+                rowSetName
+            )
+        ) {
+
+            if (
+                !lockedSetNames.includes(
+                    rowSetName
+                )
+            ) {
+
+                lockedSetNames.push(
+                    rowSetName
+                );
+
+            }
+
+            return;
+
+        }
 
             if (
 
@@ -4012,23 +4133,38 @@ if (
         row.Content_ID
     ),
 
-                questionType:
-                    row.Question_Type,
+               questionType:
 
-                category:
-                    row.Category,
+    row.Question_Type
+        ?.trim()
+        .toUpperCase(),
 
-                setName:
-                    row.Set_Name,
+category:
 
-                bloomLevel:
-                    row.Bloom_Level,
+    row.Category
+        ?.trim()
+        .toLowerCase(),
 
-                difficultyLevel:
-                    row.Difficulty_Level,
+setName:
 
-                status:
-                    row.Status,
+    row.Set_Name
+        ?.trim(),
+
+bloomLevel:
+
+    row.Bloom_Level
+        ?.trim(),
+
+difficultyLevel:
+
+    row.Difficulty_Level
+        ?.trim(),
+
+status:
+
+    row.Status
+        ?.trim()
+        .toLowerCase(),
 
                 question:
                     row.Question.trim(),
@@ -4100,6 +4236,16 @@ answerClassifications: {
 
 }
 
+if (
+    appendedCount > 0
+) {
+
+    invalidateListMastery(
+        list.listId
+    );
+
+}
+
     saveAllAssessmentQuestions();
 
     document.getElementById(
@@ -4142,6 +4288,30 @@ ${
     Invalid Content IDs:
 
     ${invalidContentIds.join(", ")}`
+
+    :
+
+    ""
+}
+
+${
+    lockedSetNames.length > 0
+
+    ?
+
+    `<br><br>
+
+    Locked Assessment Sets:
+
+    ${lockedSetNames.join(", ")}
+
+    <br>
+
+    These assessment sets have already been attempted by a learner.
+
+    <br>
+
+    New questions must be uploaded under a new Set Name.`
 
     :
 
@@ -4607,11 +4777,6 @@ ${questions.length}
         "review-question-results"
     ).innerHTML = html;
 
-    console.log(
-    document.getElementById(
-        "review-list"
-    ).value
-);
 
 }
 
