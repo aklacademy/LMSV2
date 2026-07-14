@@ -3642,6 +3642,355 @@ function performanceGenerateInterventionSummary(
 
 }
 
+
+/*=================================
+    INTERVENTION SEQUENCE
+===================================*/
+
+function performanceBuildInterventionSequence(
+
+    rankedInterventionPlan
+
+) {
+
+    const rankGroups = {};
+
+    rankedInterventionPlan.forEach(
+
+        function(intervention) {
+
+            const rank =
+
+                intervention.interventionRank;
+
+            const interventionType =
+
+                intervention.interventionType;
+
+            if (
+
+                !rankGroups[
+                    rank
+                ]
+
+            ) {
+
+                rankGroups[
+                    rank
+                ] = {};
+
+            }
+
+            if (
+
+                !rankGroups[
+                    rank
+                ][
+                    interventionType
+                ]
+
+            ) {
+
+                rankGroups[
+                    rank
+                ][
+                    interventionType
+                ] = [];
+
+            }
+
+            rankGroups[
+                rank
+            ][
+                interventionType
+            ].push(
+
+                intervention.contentTitle
+
+            );
+
+        }
+
+    );
+
+    return Object.keys(
+
+        rankGroups
+
+    ).map(
+
+        function(rank) {
+
+            const interventionGroups =
+
+                Object.keys(
+
+                    rankGroups[
+                        rank
+                    ]
+
+                ).map(
+
+                    function(interventionType) {
+
+                        return {
+
+                            interventionType:
+                                interventionType,
+
+                            contentTitles:
+
+                                rankGroups[
+                                    rank
+                                ][
+                                    interventionType
+                                ]
+
+                        };
+
+                    }
+
+                );
+
+            return {
+
+                interventionRank:
+
+                    Number(
+                        rank
+                    ),
+
+                interventionGroups:
+                    interventionGroups
+
+            };
+
+        }
+
+    );
+
+}
+
+
+
+/*=================================
+    INTERVENTION INSTRUCTION
+===================================*/
+
+function performanceGenerateInterventionInstruction(
+
+    interventionSequence
+
+) {
+
+    if (
+
+        interventionSequence.length === 0
+
+    ) {
+
+        return (
+
+            "No intervention is currently required."
+
+        );
+
+    }
+
+    const sequenceStatements = [];
+
+    interventionSequence.forEach(
+
+        function(sequence, sequenceIndex) {
+
+            sequence.interventionGroups.forEach(
+
+                function(group, groupIndex) {
+
+                    const titles =
+
+                        group.contentTitles;
+
+                    let contentText = "";
+
+                    if (
+
+                        titles.length === 1
+
+                    ) {
+
+                        contentText =
+
+                            titles[0];
+
+                    }
+
+                    else if (
+
+                        titles.length === 2
+
+                    ) {
+
+                        contentText =
+
+                            titles[0]
+
+                            +
+
+                            " and "
+
+                            +
+
+                            titles[1];
+
+                    }
+
+                    else {
+
+                        contentText =
+
+                            titles
+                                .slice(
+                                    0,
+                                    -1
+                                )
+                                .join(", ")
+
+                            +
+
+                            " and "
+
+                            +
+
+                            titles[
+                                titles.length - 1
+                            ];
+
+                    }
+
+                    let sequenceWord = "";
+
+const statementPosition =
+
+    sequenceStatements.length;
+
+if (
+
+    statementPosition === 0
+
+) {
+
+    sequenceWord =
+        "Begin with";
+
+}
+
+else {
+
+    const isLastSequence =
+
+        sequenceIndex ===
+        interventionSequence.length - 1;
+
+    const isLastGroup =
+
+        groupIndex ===
+        sequence.interventionGroups.length - 1;
+
+    if (
+
+        isLastSequence
+
+        &&
+
+        isLastGroup
+
+    ) {
+
+        sequenceWord =
+            "Finally, use";
+
+    }
+
+    else if (
+
+        statementPosition === 1
+
+    ) {
+
+        sequenceWord =
+            "Then use";
+
+    }
+
+    else if (
+
+        statementPosition === 2
+
+    ) {
+
+        sequenceWord =
+            "Follow this with";
+
+    }
+
+    else {
+
+        sequenceWord =
+            "Continue with";
+
+    }
+
+}
+
+                    const statement =
+
+                        sequenceWord
+
+                        +
+
+                        " "
+
+                        +
+
+                        group.interventionType
+                            .toLowerCase()
+
+                        +
+
+                        " for "
+
+                        +
+
+                        contentText
+
+                        +
+
+                        ".";
+
+                    sequenceStatements.push(
+
+                        statement
+
+                    );
+
+                }
+
+            );
+
+        }
+
+    );
+
+    return sequenceStatements.join(
+
+        " "
+
+    );
+
+}
+
+
 /*=================================
     INVERSE NORMAL CDF
 ===================================*/
@@ -4661,5 +5010,586 @@ function performanceBuildParetoDisplayData(
         }
 
     );
+
+}
+
+
+/*=================================
+    COLLAPSIBLE ANALYTICS SECTION
+===================================*/
+
+function performanceBuildCollapsibleSection(
+
+    title,
+
+    contentHTML,
+
+    openByDefault = false
+
+) {
+
+    return `
+
+        <details
+
+            class="performance-section"
+
+            ${
+
+                openByDefault
+
+                ?
+
+                "open"
+
+                :
+
+                ""
+
+            }
+
+        >
+
+            <summary>
+
+                ${title}
+
+            </summary>
+
+            <div
+
+                class="performance-section-content"
+
+            >
+
+                ${contentHTML}
+
+            </div>
+
+        </details>
+
+    `;
+
+}
+
+/*=================================
+    PERFORMANCE SUMMARY TABLE
+===================================*/
+
+function performanceBuildSummaryTable(
+
+    metrics
+
+) {
+
+    let rowsHTML = "";
+
+    metrics.forEach(
+
+        function(metric) {
+
+            rowsHTML += `
+
+                <tr>
+
+                    <td>
+
+                        ${metric.label}
+
+                    </td>
+
+                    <td>
+
+                        ${metric.value}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    );
+
+    return `
+
+        <table
+
+            class="performance-table"
+
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        Metric
+
+                    </th>
+
+                    <th>
+
+                        Value
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${rowsHTML}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+/*=================================
+    PERFORMANCE OVERVIEW TABLE
+===================================*/
+
+function performanceBuildOverviewTable(
+
+    metrics
+
+) {
+
+    let rowsHTML = "";
+
+    metrics.forEach(
+
+        function(metric) {
+
+            rowsHTML += `
+
+                <tr>
+
+                    <td>
+
+                        ${metric.category}
+
+                    </td>
+
+                    <td>
+
+                        ${metric.label}
+
+                    </td>
+
+                    <td>
+
+                        ${metric.value}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    );
+
+    return `
+
+        <table
+
+            class="performance-table"
+
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        Category
+
+                    </th>
+
+                    <th>
+
+                        Metric
+
+                    </th>
+
+                    <th>
+
+                        Value
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${rowsHTML}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+/*=================================
+    ANSWER QUALITY TABLE
+===================================*/
+
+function performanceBuildAnswerQualityTable(
+
+    answerQualitySummary
+
+) {
+
+    let rowsHTML = "";
+
+    answerQualitySummary.forEach(
+
+        function(area) {
+
+            rowsHTML += `
+
+                <tr>
+
+                    <td>
+
+                        ${area.learningArea}
+
+                    </td>
+
+                    <td>
+
+                        ${area.correctPercent}%
+
+                    </td>
+
+                    <td>
+
+                        ${area.closePercent}%
+
+                    </td>
+
+                    <td>
+
+                        ${area.lessRelevantPercent}%
+
+                    </td>
+
+                    <td>
+
+                        ${area.irrelevantPercent}%
+
+                    </td>
+
+                    <td>
+
+                        ${area.feedback}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    );
+
+    return `
+
+        <table
+
+            class="performance-table"
+
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        Learning Area
+
+                    </th>
+
+                    <th>
+
+                        Correct
+
+                    </th>
+
+                    <th>
+
+                        Close
+
+                    </th>
+
+                    <th>
+
+                        Less Relevant
+
+                    </th>
+
+                    <th>
+
+                        Irrelevant
+
+                    </th>
+
+                    <th>
+
+                        Teacher Insight
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${rowsHTML}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+/*=================================
+    DEFECT CAUSE TABLE
+===================================*/
+
+function performanceBuildDefectCauseTable(
+
+    defectCauseProfile
+
+) {
+
+    return `
+
+        <table
+
+            class="performance-table"
+
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        Defect Cause
+
+                    </th>
+
+                    <th>
+
+                        Defects
+
+                    </th>
+
+                    <th>
+
+                        Defect %
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+
+                        Close
+
+                    </td>
+
+                    <td>
+
+                        ${defectCauseProfile.close}
+
+                    </td>
+
+                    <td>
+
+                        ${defectCauseProfile.closePercent}%
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>
+
+                        Less Relevant
+
+                    </td>
+
+                    <td>
+
+                        ${defectCauseProfile.lessRelevant}
+
+                    </td>
+
+                    <td>
+
+                        ${defectCauseProfile.lessRelevantPercent}%
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>
+
+                        Irrelevant
+
+                    </td>
+
+                    <td>
+
+                        ${defectCauseProfile.irrelevant}
+
+                    </td>
+
+                    <td>
+
+                        ${defectCauseProfile.irrelevantPercent}%
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+/*=================================
+    INTERVENTION PLAN TABLE
+===================================*/
+
+function performanceBuildInterventionPlanTable(
+
+    interventionSequence
+
+) {
+
+    let rowsHTML = "";
+
+    interventionSequence.forEach(
+
+        function(rankGroup) {
+
+            rankGroup.interventionGroups.forEach(
+
+                function(interventionGroup) {
+
+                    rowsHTML += `
+
+                        <tr>
+
+                            <td>
+
+                                ${rankGroup.interventionRank}
+
+                            </td>
+
+                            <td>
+
+                                ${interventionGroup.interventionType}
+
+                            </td>
+
+                            <td>
+
+                                ${interventionGroup
+                                    .contentTitles
+                                    .join(", ")}
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+
+            );
+
+        }
+
+    );
+
+    return `
+
+        <table
+
+            class="performance-table"
+
+        >
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        Rank
+
+                    </th>
+
+                    <th>
+
+                        Intervention Type
+
+                    </th>
+
+                    <th>
+
+                        Priority Content
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${rowsHTML}
+
+            </tbody>
+
+        </table>
+
+    `;
 
 }
