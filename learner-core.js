@@ -30,6 +30,8 @@ function initializeListProgress(
 
             completedSets: [],
 
+            attemptedMasteredSets: [],
+
             completedMasteredSets: [],
 
             masteredRevisionQuestions: [],
@@ -51,6 +53,9 @@ function initializeListProgress(
 
     const progress =
         learnerData.lists[listName];
+
+    progress.attemptedMasteredSets =
+    progress.attemptedMasteredSets || [];
 
     progress.completedMasteredSets =
         progress.completedMasteredSets || [];
@@ -501,6 +506,18 @@ else if (
 
 }
 
+
+function goToCourses() {
+
+    pageHistory = [];
+
+    showPage(
+        "cover-page"
+    );
+
+}
+
+
 // open item
 
 
@@ -847,11 +864,6 @@ function openSearch() {
     getLearningAreasByCourse(
         currentCourse
     );
-
-    console.log(
-    "Learning Areas:",
-    learningAreas
-);
 
 getLearningAreas().forEach(
     function(area) {
@@ -1357,13 +1369,6 @@ ${course.title}
 
 `;
 
-    console.log(
-    learner
-);
-
-console.log(
-    course
-);
 
 }
 
@@ -1861,23 +1866,28 @@ if (!alreadyAttempted) {
         currentListProgress.masteredQuestions
             .push(questionRecord);
 
-        // Remove from revision if mastered later
 
-        currentListProgress.revisionQuestions =
+// Remove this question from revision
+// if answered correctly later
+
+currentListProgress.revisionQuestions =
     currentListProgress.revisionQuestions.filter(
-                function(item) {
+        function(item) {
 
-                    return !(
-    item.contentId
-    === currentQuestion.contentId
-    &&
-    item.setName
-    === currentSet
-);
+            return !(
 
-                }
+                item.questionId
+                === currentQuestion.questionId
+
+                &&
+
+                item.setName
+                === currentSet
+
             );
 
+        }
+    );
         alert(
             "Correct! Moved to Mastered."
         );
@@ -1890,20 +1900,22 @@ if (!alreadyAttempted) {
 else {
 
     const alreadyExists =
-        currentListProgress.revisionQuestions
-            .some(function(item) {
+    currentListProgress.revisionQuestions
+        .some(function(item) {
 
-                return (
-                    item.contentId
-    === currentQuestion.contentId
+            return (
 
-    &&  
+                item.questionId
+                === currentQuestion.questionId
 
-    item.setName
-    === currentSet
-                );
+                &&
 
-            });
+                item.setName
+                === currentSet
+
+            );
+
+        });
 
     if (!alreadyExists) {
 
@@ -1931,17 +1943,16 @@ else {
                 )
         );
 
-    // Remove duplicate revision items
+   // Remove duplicate revision questions
 
-  
 currentListProgress.revisionQuestions =
     currentListProgress.revisionQuestions.filter(
         (item, index, self) =>
             index === self.findIndex(
                 t =>
 
-                    t.contentId
-                    === item.contentId
+                    t.questionId
+                    === item.questionId
 
                     &&
 
@@ -1953,9 +1964,7 @@ currentListProgress.revisionQuestions =
 
     currentQuestionIndex++;
 
-    console.log(currentQuestionIndex);
 
-console.log(currentQuestions.length);
 
     // NEXT QUESTION
 
@@ -2029,25 +2038,12 @@ if (
 
 ) {
 
-
-    console.log(totalSets);
-
-    console.log(completedSetsCount);
-
-    console.log(
-        currentListProgress.completedSets
-    );
-
-    console.log(
-        currentListProgress.revisionQuestions
-    );
-
     currentListProgress.mastered =
         true;
 
 }
     saveLearnerProgress();
-    console.log(learnerProgress);
+
 
 }
 
@@ -2255,6 +2251,11 @@ function openRevisionDashboard() {
 
 function loadRevisionCard(contentId) {
 
+    currentRevisionContentId =
+    Number(
+        contentId
+    );
+
     const currentItems =
     getItemsByListId(
         currentList
@@ -2315,9 +2316,12 @@ revisionItemIndex =
     });
 
     currentRevisionQuestion =
-        revisionQuestion;
+    revisionQuestion;
 
-        isMasteredRevision = false;
+currentSet =
+    revisionQuestion.setName;
+
+isMasteredRevision = false;
 
     showPage("items-page");
 
@@ -2367,124 +2371,161 @@ function showRevisionCard() {
     const item =
         revisionItems[revisionItemIndex];
 
+
+    let revisionLearningHTML = "";
+
+
+    // VOCABULARY REVISION
+
+    if (
+        item.contentType === "word"
+    ) {
+
+        revisionLearningHTML = `
+    
+            <div class="revision-learning-card">
+
+                <h2>
+                    ${item.title}
+                </h2>
+
+                <p>
+
+                    <strong>
+                        Definition:
+                    </strong>
+
+                    ${item.content.definition}
+
+                </p>
+
+                <p>
+
+                    <strong>
+                        Synonyms:
+                    </strong>
+
+                    ${item.content.synonyms}
+
+                </p>
+
+                <p>
+
+                    <strong>
+                        Antonyms:
+                    </strong>
+
+                    ${item.content.antonyms}
+
+                </p>
+
+                <div class="examples">
+
+                    <strong>
+                        Examples:
+                    </strong>
+
+                    <ul>
+
+                        ${item.content.examples.map(
+                            function(example) {
+
+                                return `
+                        
+                                    <li>
+                                        ${example}
+                                    </li>
+
+                                `;
+
+                            }
+                        ).join("")}
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // LESSON REVISION
+
+    else if (
+        item.contentType === "lesson"
+    ) {
+
+        revisionLearningHTML =
+
+            buildLessonCard(
+
+                item
+
+            );
+
+    }
+
+
     itemsContainer.innerHTML = `
     
         <div class="item-card revision-card">
 
-    <div class="revision-feedback">
+            <div class="revision-feedback">
 
-    <p class="card-counter">
+                <p class="card-counter">
 
-        Revision
-        ${revisionItemIndex + 1}
-        of
-        ${revisionItems.length}
+                    Revision
+                    ${revisionItemIndex + 1}
+                    of
+                    ${revisionItems.length}
 
-    </p>
+                </p>
 
-        <p>
+                <p>
 
-            <strong>
-                Question:
-            </strong>
+                    <strong>
+                        Question:
+                    </strong>
 
-            ${currentRevisionQuestion.question}
+                    ${currentRevisionQuestion.question}
 
-        </p>
+                </p>
 
-        <p>
+                <p>
 
-            <strong>
-                Your Answer:
-            </strong>
+                    <strong>
+                        Your Answer:
+                    </strong>
 
-            ❌ ${currentRevisionQuestion.selectedAnswer}
+                    ❌ ${currentRevisionQuestion.selectedAnswer}
 
-        </p>
+                </p>
 
-        <p>
+                <p>
 
-            <strong>
-                Correct Answer:
-            </strong>
+                    <strong>
+                        Correct Answer:
+                    </strong>
 
-            ✅ ${currentRevisionQuestion.correctAnswer}
+                    ✅ ${currentRevisionQuestion.correctAnswer}
 
-        </p>
+                </p>
 
-    </div>
+            </div>
 
-    <hr class="revision-divider">
+            <hr class="revision-divider">
 
-    <div class="revision-learning-card">
-
-        <h2>
-            ${item.title}
-        </h2>
-
-        <p>
-
-            <strong>
-                Definition:
-            </strong>
-
-            ${item.content.definition}
-
-        </p>
-
-        <p>
-
-            <strong>
-                Synonyms:
-            </strong>
-
-            ${item.content.synonyms}
-
-        </p>
-
-        <p>
-
-            <strong>
-                Antonyms:
-            </strong>
-
-            ${item.content.antonyms}
-
-        </p>
-
-        <div class="examples">
-
-            <strong>
-                Examples:
-            </strong>
-
-            <ul>
-
-                ${item.content.examples.map(
-                    function(example) {
-
-                        return `
-                        
-                            <li>
-                                ${example}
-                            </li>
-
-                        `;
-
-                    }
-                ).join("")}
-
-            </ul>
+            ${revisionLearningHTML}
 
         </div>
 
-    </div>
-
-</div>
-
     `;
 
-     updateRevisionButtons();   
+
+    updateRevisionButtons();
 
 }
 
@@ -2560,25 +2601,22 @@ function previousRevisionItem() {
 function completeRevision() {
 
     const currentListProgress =
-    getCurrentListProgress();
-
-        console.log(
-    "Revision Questions:",
-    currentListProgress.revisionQuestions
-);
-
-console.log(
-    "Current Set:",
-    currentSet
-);
+        getCurrentListProgress();
 
     currentQuestions =
         currentListProgress.revisionQuestions
             .filter(function(question) {
 
                 return (
-                    question.setName
-                    === currentSet
+
+                    Number(
+                        question.contentId
+                    )
+                    ===
+                    Number(
+                        currentRevisionContentId
+                    )
+
                 );
 
             });
@@ -2588,10 +2626,10 @@ console.log(
     revisionMode = true;
 
     showPage("assessment-page");
+
     showQuestion();
 
 }
-
 
 /*======================================
         Mastered
@@ -2747,17 +2785,21 @@ function openMastered() {
 }
 
 
-function openRevision() {
+function openRevision(
+listId) {
+
+currentList = listId;
 
     initializeListProgress(currentList);
 
     document.querySelector(
-    "#revision-page h2"
-).textContent =
-    "Revision";
+        "#revision-page h2"
+    ).textContent =
+        "Revision";
 
     const currentListProgress =
-    getCurrentListProgress();
+        getCurrentListProgress();
+
     showPage("revision-page");
 
     const revisionContainer =
@@ -3004,15 +3046,9 @@ function openAssessmentReview(setName) {
 
             });
 
-            console.log(
-    "Review Set:",
-    setName
-);
+       
 
-console.log(
-    "Attempt History:",
-    attemptHistory
-);
+
 
     showPage("assessment-page");
 
@@ -3334,6 +3370,10 @@ function openMasteredAssessment(
         currentList
     );
 
+    reconcileMasteredSetCompletion(
+    currentList
+);
+
     const learnerData =
     getCurrentLearnerProgress();
 
@@ -3370,6 +3410,10 @@ if (
     learnerData.lists[
         currentList
     ];
+
+const attemptedMasteredSets =
+    progress.attemptedMasteredSets
+    || [];
 
 const completedMasteredSets =
     progress.completedMasteredSets
@@ -3430,6 +3474,11 @@ masteredSets.forEach(function(
         unresolvedQuestions
             .length === 0;
 
+        const isFullyAttempted =
+
+    attemptedMasteredSets
+        .includes(setName);
+
     let buttonLabel =
         setName;
 
@@ -3437,32 +3486,46 @@ masteredSets.forEach(function(
         "";
 
     if (
-        isFullyCompleted
-    ) {
+    isFullyCompleted
+) {
 
-        buttonLabel =
-            "✅ " + setName;
+    buttonLabel =
+        "✅ " + setName;
 
-    }
 
-    else if (
-        index === activeDayIndex
-    ) {
+}
 
-        buttonLabel =
-            "▶ " + setName;
+else if (
+    isFullyAttempted
+) {
 
-    }
+    buttonLabel =
+        "🔄 " + setName
+        + " - Revision Required";
 
-    else {
+    disabled =
+        "disabled";
 
-        buttonLabel =
-            "🔒 " + setName;
+}
 
-        disabled =
-            "disabled";
+else if (
+    index === activeDayIndex
+) {
 
-    }
+    buttonLabel =
+        "▶ " + setName;
+
+}
+
+else {
+
+    buttonLabel =
+        "🔒 " + setName;
+
+    disabled =
+        "disabled";
+
+}
 
     setsContainer.innerHTML += `
     
@@ -3489,6 +3552,49 @@ masteredSets.forEach(function(
 function openMasteredQuestionSet(
     setName
 ) {
+
+    initializeListProgress(
+        currentList
+    );
+
+    reconcileMasteredSetCompletion(
+        currentList
+    );
+
+    const progress =
+        getCurrentListProgress();
+
+    if (
+        progress
+            .completedMasteredSets
+            .includes(setName)
+    ) {
+
+        alert(
+            setName
+            +
+            " has already been completed."
+        );
+
+        return;
+
+    }
+
+    if (
+        progress
+            .attemptedMasteredSets
+            .includes(setName)
+    ) {
+
+        alert(
+            setName
+            +
+            " has been fully attempted. Please complete Mastered Revision."
+        );
+
+        return;
+
+    }
 
     currentSet = setName;
 
@@ -3888,16 +3994,6 @@ function goHome() {
 
 }
 
-function goToCourses() {
-
-    pageHistory = [];
-
-    showPage(
-        "cover-page"
-    );
-
-}
-
 function showMasteredReviewCard() {
 
 
@@ -3978,59 +4074,19 @@ function showMasteredReviewCard() {
 
     // LESSON REVIEW
 
-    else if (
-        item.contentType === "lesson"
-    ) {
+else if (
+    item.contentType === "lesson"
+) {
 
-        itemsContainer.innerHTML = `
-        
-            <div class="item-card">
+    itemsContainer.innerHTML =
 
-                <h2>
-                    ${item.title}
-                </h2>
+        buildLessonCard(
 
-                <p>
+            item
 
-                    <strong>
-                        Explanation:
-                    </strong>
+        );
 
-                    ${item.content.explanation}
-
-                </p>
-
-                <div class="examples">
-
-                    <strong>
-                        Examples:
-                    </strong>
-
-                    <ul>
-
-                        ${item.content.examples.map(
-                            function(example) {
-
-                                return `
-                                
-                                    <li>
-                                        ${example}
-                                    </li>
-
-                                `;
-
-                            }
-                        ).join("")}
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        `;
-
-    }
+}
 
     document.querySelector(
     ".card-navigation"
@@ -4276,25 +4332,20 @@ function checkMasteredAnswer(
     ) {
 
         currentListProgress
-            .masteredRevisionQuestions =
+    .masteredRevisionQuestions =
 
-            currentListProgress
-                .masteredRevisionQuestions
-                .filter(function(item) {
+    currentListProgress
+        .masteredRevisionQuestions
+        .filter(function(item) {
 
-                    return !(
+            return (
 
-                        item.contentId
-                            === currentQuestion.contentId
+                item.questionId
+                    !== currentQuestion.questionId
 
-                        &&
+            );
 
-                        item.setName
-                            === currentSet
-
-                    );
-
-                });
+        });
 
         alert(
             "Correct!"
@@ -4308,23 +4359,18 @@ function checkMasteredAnswer(
 
         const alreadyExists =
 
-            currentListProgress
-                .masteredRevisionQuestions
-                .some(function(item) {
+    currentListProgress
+        .masteredRevisionQuestions
+        .some(function(item) {
 
-                    return (
+            return (
 
-                        item.contentId
-                            === currentQuestion.contentId
+                item.questionId
+                    === currentQuestion.questionId
 
-                        &&
+            );
 
-                        item.setName
-                            === currentSet
-
-                    );
-
-                });
+        });
 
         if (!alreadyExists) {
 
@@ -4340,29 +4386,40 @@ function checkMasteredAnswer(
 
     }
 
-    // REMOVE DUPLICATES
+   // REMOVE DUPLICATES
+
+currentListProgress
+    .masteredRevisionQuestions =
 
     currentListProgress
-        .masteredRevisionQuestions =
+        .masteredRevisionQuestions
+        .filter(
+            function(
+                item,
+                index,
+                self
+            ) {
 
-        currentListProgress
-            .masteredRevisionQuestions
-            .filter(
-                (item, index, self) =>
+                return (
 
                     index ===
                     self.findIndex(
-                        t =>
+                        function(question) {
 
-                            t.contentId
-                                === item.contentId
+                            return (
 
-                            &&
+                                question.questionId
+                                    === item.questionId
 
-                            t.setName
-                                === item.setName
+                            );
+
+                        }
                     )
-            );
+
+                );
+
+            }
+        );
 
     currentQuestionIndex++;
 
@@ -4377,21 +4434,56 @@ function checkMasteredAnswer(
 
     }
 
-    // SET COMPLETED
+    // SET FULLY ATTEMPTED
 
     else {
 
-        if (
-            !currentListProgress
-                .completedMasteredSets
-                .includes(currentSet)
-        ) {
+       if (
+    !currentListProgress
+        .attemptedMasteredSets
+        .includes(currentSet)
+) {
 
-            currentListProgress
-                .completedMasteredSets
-                .push(currentSet);
+    currentListProgress
+        .attemptedMasteredSets
+        .push(currentSet);
 
-        }
+}
+
+if (
+    isMasteredRevision
+) {
+
+    const unresolvedSetQuestions =
+
+        currentListProgress
+            .masteredRevisionQuestions
+            .filter(function(question) {
+
+                return (
+                    question.setName
+                    === currentSet
+                );
+
+            });
+
+    if (
+        unresolvedSetQuestions.length === 0
+
+        &&
+
+        !currentListProgress
+            .completedMasteredSets
+            .includes(currentSet)
+    ) {
+
+        currentListProgress
+            .completedMasteredSets
+            .push(currentSet);
+
+    }
+
+}
 
         // FINAL MASTERED STATE
 
@@ -4449,6 +4541,63 @@ function checkMasteredAnswer(
     }
 
 }
+
+/*======================================
+    Reconcile Mastered Set Completion
+========================================*/
+
+function reconcileMasteredSetCompletion(
+    listId
+) {
+
+    initializeListProgress(
+        listId
+    );
+
+    const progress =
+        getListProgress(
+            listId
+        );
+
+    progress
+        .attemptedMasteredSets
+        .forEach(function(setName) {
+
+            const hasUnresolvedRevision =
+
+                progress
+                    .masteredRevisionQuestions
+                    .some(function(question) {
+
+                        return (
+
+                            question.setName
+                            === setName
+
+                        );
+
+                    });
+
+            if (
+                !hasUnresolvedRevision
+
+                &&
+
+                !progress
+                    .completedMasteredSets
+                    .includes(setName)
+            ) {
+
+                progress
+                    .completedMasteredSets
+                    .push(setName);
+
+            }
+
+        });
+
+}
+
 
 function openMasteredRevisionDashboard() {
 
@@ -4588,20 +4737,40 @@ function loadMasteredRevisionCard(
 
         });
 
-            console.log(
-    "contentId:",
-    contentId,
-    typeof contentId
-);
+if (
+    !revisionQuestion
+) {
 
-console.log(
+    return;
+
+}
+
+const revisionSetName =
+    revisionQuestion.setName;
+
+const isSetAttempted =
+
     currentListProgress
-        .masteredRevisionQuestions[0]
-        .contentId,
-    typeof currentListProgress
-        .masteredRevisionQuestions[0]
-        .contentId
-);
+        .attemptedMasteredSets
+        .includes(
+            revisionSetName
+        );
+
+if (
+    !isSetAttempted
+) {
+
+    alert(
+        revisionSetName
+        +
+        " assessment must be fully attempted before Mastered Revision."
+    );
+
+    return;
+
+}
+
+isMasteredRevision = true;
 
     const revisionContentIds =
         currentListProgress
