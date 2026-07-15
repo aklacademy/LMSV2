@@ -2045,7 +2045,9 @@ function performanceGenerateDefectCauseFeedback(
 
 function performanceBuildLearningAreaQualityProfile(
 
-    answerQualitySummary
+    answerQualitySummary,
+
+    reportMode = "learner"
 
 ) {
 
@@ -2247,7 +2249,9 @@ function performanceBuildLearningAreaQualityProfile(
 
     performanceGenerateQualityFeedback(
 
-        profile
+        profile,
+
+        reportMode
 
     );
 
@@ -2270,11 +2274,66 @@ function performanceBuildLearningAreaQualityProfile(
 
 function performanceGenerateQualityFeedback(
 
-    profile
+    profile,
+
+    reportMode = "learner"
 
 ) {
 
     let understanding = "";
+
+
+    const feedbackSubject =
+
+        reportMode === "curriculum"
+
+        ?
+
+        "Learners show "
+
+        :
+
+        "The learner shows ";
+
+
+    const showVerb =
+
+        reportMode === "curriculum"
+
+        ?
+
+        "show"
+
+        :
+
+        "shows";
+
+
+    const supportVerb =
+
+        reportMode === "curriculum"
+
+        ?
+
+        "need"
+
+        :
+
+        "needs";
+
+
+    const possessionVerb =
+
+        reportMode === "curriculum"
+
+        ?
+
+        "have"
+
+        :
+
+        "has";
+
 
     if (
 
@@ -2320,6 +2379,7 @@ function performanceGenerateQualityFeedback(
 
     }
 
+
     const gapPercentages = {
 
         close:
@@ -2333,6 +2393,7 @@ function performanceGenerateQualityFeedback(
 
     };
 
+
     const highestGap =
 
         Math.max(
@@ -2344,6 +2405,7 @@ function performanceGenerateQualityFeedback(
             gapPercentages.irrelevant
 
         );
+
 
     const dominantGaps =
 
@@ -2368,7 +2430,9 @@ function performanceGenerateQualityFeedback(
 
         );
 
+
     let gapFeedback = "";
+
 
     if (
 
@@ -2378,7 +2442,15 @@ function performanceGenerateQualityFeedback(
 
         gapFeedback =
 
-            "and shows no significant answer-quality gaps.";
+            "and "
+
+            +
+
+            showVerb
+
+            +
+
+            " no significant answer-quality gaps.";
 
     }
 
@@ -2390,7 +2462,15 @@ function performanceGenerateQualityFeedback(
 
         gapFeedback =
 
-            "but shows mixed learning gaps that require targeted review and guided practice.";
+            "but "
+
+            +
+
+            showVerb
+
+            +
+
+            " mixed learning gaps that require targeted review and guided practice.";
 
     }
 
@@ -2403,7 +2483,15 @@ function performanceGenerateQualityFeedback(
 
         gapFeedback =
 
-            "but needs support in distinguishing closely related meanings and usages.";
+            "but "
+
+            +
+
+            supportVerb
+
+            +
+
+            " support in distinguishing closely related meanings and usages.";
 
     }
 
@@ -2416,7 +2504,15 @@ function performanceGenerateQualityFeedback(
 
         gapFeedback =
 
-            "but needs support in making stronger contextual connections.";
+            "but "
+
+            +
+
+            supportVerb
+
+            +
+
+            " support in making stronger contextual connections.";
 
     }
 
@@ -2429,13 +2525,22 @@ function performanceGenerateQualityFeedback(
 
         gapFeedback =
 
-            "but has conceptual gaps that require focused review.";
+            "but "
+
+            +
+
+            possessionVerb
+
+            +
+
+            " conceptual gaps that require focused review.";
 
     }
 
+
     return (
 
-        "The learner shows "
+        feedbackSubject
 
         +
 
@@ -2516,6 +2621,99 @@ function performanceBuildLearningProgressSummary(
         }
 
     );
+
+    return progressSummary;
+
+}
+
+/*======================================
+    Build Scoped Learning Progress Summary
+========================================*/
+
+function performanceBuildScopedLearningProgressSummary(
+
+    learnerId,
+
+    scopedLists
+
+) {
+
+    const progressSummary = {
+
+        assignedLists: 0,
+
+        learnedLists: 0,
+
+        masteredLists: 0
+
+    };
+
+
+    const learnerData =
+
+        learnerProgress[
+            learnerId
+        ]
+
+        ||
+
+        {
+
+            lists: {}
+
+        };
+
+
+    progressSummary.assignedLists =
+
+        scopedLists.length;
+
+
+    scopedLists.forEach(
+
+        function(list) {
+
+            const progress =
+
+                learnerData.lists[
+                    list.listId
+                ];
+
+
+            if (!progress) {
+
+                return;
+
+            }
+
+
+            if (
+
+                progress.learned
+
+            ) {
+
+                progressSummary
+                    .learnedLists++;
+
+            }
+
+
+            if (
+
+                progress.mastered
+
+            ) {
+
+                progressSummary
+                    .masteredLists++;
+
+            }
+
+        }
+
+    );
+
 
     return progressSummary;
 
@@ -5591,5 +5789,224 @@ function performanceBuildInterventionPlanTable(
         </table>
 
     `;
+
+}
+
+/*=================================
+    GET CURRICULUM ASSIGNED LISTS
+===================================*/
+
+function curriculumGetAssignedLists(
+    courseIds
+) {
+
+    const assignedLists = [];
+
+
+    courseIds.forEach(
+
+        function(courseId) {
+
+            const course =
+
+                getCourseById(
+                    courseId
+                );
+
+
+            if (!course) {
+
+                return;
+
+            }
+
+
+            assignedLists.push(
+
+                ...(
+                    course.assignedLists
+                    || []
+                )
+
+            );
+
+        }
+
+    );
+
+
+    return [
+
+        ...new Set(
+            assignedLists
+        )
+
+    ];
+
+}
+
+/*=================================
+    GET CURRICULUM QUESTIONS
+===================================*/
+
+function curriculumGetQuestions(
+    courseIds
+) {
+
+    const assignedLists =
+
+        curriculumGetAssignedLists(
+
+            courseIds
+
+        );
+
+
+    return getAssessmentQuestions()
+        .filter(
+
+            function(question) {
+
+                return (
+
+                    assignedLists.includes(
+
+                        question.listId
+
+                    )
+
+                );
+
+            }
+
+        );
+
+}
+
+
+/*=================================
+    GET CURRICULUM CONTENTS
+===================================*/
+
+function curriculumGetContents(
+    courseIds
+) {
+
+    const assignedLists =
+
+        curriculumGetAssignedLists(
+
+            courseIds
+
+        );
+
+
+    return getContents()
+        .filter(
+
+            function(content) {
+
+                return (
+
+                    assignedLists.includes(
+
+                        content.listId
+
+                    )
+
+                );
+
+            }
+
+        );
+
+}
+
+
+/*=================================
+    GET CURRICULUM
+    QUESTION OPPORTUNITIES
+==================================*/
+
+function curriculumGetQuestionOpportunities() {
+
+    const learnerScope =
+
+        curriculumGetLearnerScope();
+
+
+    const questionOpportunities = {};
+
+
+    learnerScope.forEach(
+
+        function(scope) {
+
+            const learnerId =
+
+                scope.learnerId;
+
+
+            const relevantQuestions =
+
+                curriculumGetQuestions(
+
+                    scope.courseIds
+
+                );
+
+
+            relevantQuestions.forEach(
+
+                function(question) {
+
+                    const questionOpportunityId =
+
+                        learnerId
+
+                        +
+
+                        "::Q"
+
+                        +
+
+                        question.questionId;
+
+
+                    questionOpportunities[
+
+                        questionOpportunityId
+
+                    ] = {
+
+                        questionOpportunityId:
+                            questionOpportunityId,
+
+                        learnerId:
+                            learnerId,
+
+                        questionId:
+                            question.questionId,
+
+                        contentId:
+                            question.contentId,
+
+                        listId:
+                            question.listId
+
+                    };
+
+                }
+
+            );
+
+        }
+
+    );
+
+
+    return (
+        questionOpportunities
+    );
 
 }
