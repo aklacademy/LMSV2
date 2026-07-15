@@ -14,6 +14,8 @@ let revisionMode = false;
 
 let revisionItems = [];
 
+let currentRevisionContentId = null;
+
 let revisionItemIndex = 0;
 
 let currentLearningArea = "";
@@ -66,6 +68,8 @@ window.contentEditMode = false;
 let currentSelectedCourses = [];
 
 let currentAnalysisLevel = "";
+
+let currentCurriculumSelectedCourses = [];
 
 let learnerProgress = {
 
