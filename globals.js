@@ -69,6 +69,8 @@ let currentSelectedCourses = [];
 
 let currentAnalysisLevel = "";
 
+let currentQuestionStartTime = null;
+
 let currentCurriculumSelectedCourses = [];
 
 let learnerProgress = {

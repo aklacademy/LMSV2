@@ -8725,3 +8725,1054 @@ function performanceOpenContentReport(
 
 }
 
+/*=============================================================================================
+
+
+===============================================================================================*/
+
+/*===============================
+    OPEN LEARNER ANALYTICS PAGE
+================================*/
+
+function openLearnerAnalyticsPage() {
+
+    showPage(
+        "learner-analytics-page"
+    );
+
+}
+
+/*==================================================
+    CONTENT ANALYTICS
+==================================================*/
+/*===============================
+    OPEN CONTENT ANALYTICS PAGE
+================================*/
+
+function openContentAnalyticsPage() {
+
+    showPage(
+        "content-analytics-page"
+    );
+
+    renderContentAnalyticsPage();
+
+}
+
+
+/*===============================
+    RENDER CONTENT ANALYTICS PAGE
+================================*/
+
+function renderContentAnalyticsPage() {
+
+    const container =
+        document.getElementById(
+            "content-analytics-container"
+        );
+
+    container.innerHTML = `
+
+    <div
+        id="content-search-container">
+
+    </div>
+
+    <div
+        id="content-information-container">
+
+    </div>
+
+     <div
+    id="learning-efficiency-summary-container">
+
+</div>
+
+<div
+    id="content-analysis-container">
+
+</div>
+
+<div
+    id="question-analysis-container">
+
+</div>
+
+    `;
+
+    renderContentAnalyticsSearch();
+
+}
+
+
+/*===============================
+    RENDER CONTENT SEARCH
+================================*/
+
+function renderContentAnalyticsSearch() {
+
+    const container =
+        document.getElementById(
+            "content-search-container"
+        );
+
+    container.innerHTML = `
+
+<div class="dashboard-card">
+
+    <h2>
+
+        Content Analytics
+
+    </h2>
+
+    <p>
+
+        Enter the Content ID or Content Title to continue.
+
+    </p>
+
+    <input
+        type="text"
+        id="content-search-input"
+        class="admin-input"
+        placeholder="Content ID / Content Title">
+
+    <button
+        class="nav-btn"
+        onclick="
+            searchContentAnalytics()
+        ">
+
+        Search
+
+    </button>
+
+    <div
+        id="content-search-results">
+
+    </div>
+
+</div>
+
+`;
+
+}
+
+/*===============================
+    SEARCH CONTENT
+================================*/
+
+function searchContentAnalytics() {
+
+    const contentId =
+
+        document.getElementById(
+            "content-search-input"
+        ).value.trim();
+
+    const content =
+
+        getContentById(
+            contentId
+        );
+
+    if (!content) {
+
+        alert(
+            "Content not found."
+        );
+
+        return;
+
+    }
+
+    renderContentAnalytics(
+        content
+    );
+
+}
+/*===============================
+    SHOW CONTENT SEARCH RESULTS
+================================*/
+
+function showContentSearchResults(
+
+    searchText
+
+) {
+
+
+
+}
+
+/*===============================
+    RENDER CONTENT ANALYTICS
+================================*/
+
+function renderContentAnalytics(
+
+    content
+
+) {
+
+renderContentInformation(content);
+
+renderLearningEfficiencySummary(content);
+
+renderContentAnalysis(content);
+
+renderQuestionAnalysis(content);
+
+}
+
+
+/*==================================================
+    CONTENT INFORMATION
+==================================================*/
+
+function renderContentInformation(
+
+    content
+
+) {
+
+    const container =
+
+document.getElementById(
+    "content-information-container"
+);
+
+    container.innerHTML = `
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Content Information
+
+    </h3>
+
+    <table
+        class="admin-table">
+
+        <thead>
+
+            <tr>
+
+                <th>
+
+                    Property
+
+                </th>
+
+                <th>
+
+                    Value
+
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+    <tr>
+
+        <td>
+
+            Learning Area
+
+        </td>
+
+        <td>
+
+            ${content.learningArea}
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <td>
+
+            Theme
+
+        </td>
+
+        <td>
+
+            ${content.themeId} - ${content.themeTitle}
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <td>
+
+            List
+
+        </td>
+
+        <td>
+
+            ${content.listId} - ${content.listTitle}
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <td>
+
+            Content ID
+
+        </td>
+
+        <td>
+
+            ${content.contentId}
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <td>
+
+            Title
+
+        </td>
+
+        <td>
+
+            ${content.title}
+
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <td>
+
+            Content Type
+
+        </td>
+
+        <td>
+
+            ${content.contentType}
+
+        </td>
+
+    </tr>
+
+</tbody>
+
+    </table>
+
+</div>
+
+`;
+
+}
+
+/*==================================================
+    CONTENT SUMMARY
+==================================================*/
+
+function renderContentSummary(
+
+    content
+
+) {
+
+    const container =
+
+        document.getElementById(
+            "content-summary-container"
+        );
+
+    container.innerHTML = `
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Content Summary
+
+    </h3>
+
+    <table
+        class="admin-table">
+
+        <thead>
+
+            <tr>
+
+                <th>
+
+                    Metric
+
+                </th>
+
+                <th>
+
+                    Value
+
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+    <tr>
+
+        <td>
+
+            Total Learners
+
+        </td>
+
+        <td>
+
+            ${getLearners().length}
+
+        </td>
+
+    </tr>
+
+</tbody>
+
+    </table>
+
+</div>
+
+`;
+
+}
+
+/*===============================
+    RENDER LEARNING EFFICIENCY SUMMARY
+================================*/
+
+function renderLearningEfficiencySummary(
+
+    content
+
+) {
+
+    const container =
+
+        document.getElementById(
+            "learning-efficiency-summary-container"
+        );
+
+    container.innerHTML = `
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Learning Efficiency Summary
+
+    </h3>
+
+    <table class="admin-table">
+
+        <thead>
+
+            <tr>
+
+                <th>
+
+                    Metric
+
+                </th>
+
+                <th>
+
+                    Learner
+
+                </th>
+
+                <th>
+
+                    Cohort Average
+
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>
+
+                    Accuracy
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    Learning Effectiveness Index (LEI)
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    First Attempt Time
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    Mastery Time
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    Total Time to Master
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    Attempts to Master
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    Fastest Response Time
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+
+                    Slowest Response Time
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+`;
+
+}
+
+/*===============================
+    RENDER CONTENT ANALYSIS
+================================*/
+
+function renderContentAnalysis(
+
+    content
+
+) {
+
+    const container =
+
+        document.getElementById(
+            "content-analysis-container"
+        );
+
+    container.innerHTML = `
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Content Analysis
+
+    </h3>
+
+    <div class="table-responsive">
+
+    <table class="admin-table">
+
+        <thead>
+
+            <tr>
+
+                <th>Content ID</th>
+
+                <th>Title</th>
+
+                <th>Bloom</th>
+
+                <th>Difficulty</th>
+
+                <th>Suggested Time</th>
+
+                <th>Learner Time</th>
+
+                <th>Average Time</th>
+
+                <th>Learner Accuracy</th>
+
+                <th>Average Accuracy</th>
+
+                <th>Learner LEI</th>
+
+                <th>Average LEI</th>
+
+                <th>Recommendation</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>
+
+                    ${content.contentId}
+
+                </td>
+
+                <td>
+
+                    ${content.title}
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+                <td>
+
+                    --
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    </div>
+
+</div>
+
+`;
+
+}
+
+/*===============================
+    RENDER QUESTION ANALYSIS
+================================*/
+
+function renderQuestionAnalysis(
+
+    content
+
+) {
+
+    const container =
+
+        document.getElementById(
+            "question-analysis-container"
+        );
+
+    const questions =
+
+        getQuestionsByContentId(
+            content.contentId
+        );
+
+    let tableRows = "";
+
+    questions.forEach(
+
+        function(question) {
+
+            tableRows += `
+
+<tr>
+
+    <td>
+
+        ${question.questionId}
+
+    </td>
+
+    <td>
+
+        ${question.question}
+
+    </td>
+
+    <td>
+
+        ${question.bloomLevel}
+
+    </td>
+
+<td>
+
+    ${question.difficultyLevel}
+
+</td>
+
+    <td>
+
+        ${question.expectedResponseTime}
+
+    </td>
+
+    <td>
+
+        --
+
+    </td>
+
+    <td>
+
+        --
+
+    </td>
+
+    <td>
+
+        --
+
+    </td>
+
+    <td>
+
+        --
+
+    </td>
+
+    <td>
+
+        --
+
+    </td>
+
+    <td>
+
+        --
+
+    </td>
+
+    <td>
+
+        --
+
+    </td>
+
+</tr>
+
+`;
+
+        }
+
+    );
+
+    container.innerHTML = `
+
+<div class="dashboard-card">
+
+    <h3>
+
+        Question Analysis
+
+    </h3>
+
+    <div class="table-responsive">
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        Question ID
+
+                    </th>
+
+                    <th>
+
+                        Question
+
+                    </th>
+
+                    <th>
+
+                        Bloom
+
+                    </th>
+
+                    <th>
+
+                        Difficulty
+
+                    </th>
+
+                    <th>
+
+                        Suggested Time
+
+                    </th>
+
+                    <th>
+
+                        Learner Time
+
+                    </th>
+
+                    <th>
+
+                        Average Time
+
+                    </th>
+
+                    <th>
+
+                        Learner Accuracy
+
+                    </th>
+
+                    <th>
+
+                        Average Accuracy
+
+                    </th>
+
+                    <th>
+
+                        Learner LEI
+
+                    </th>
+
+                    <th>
+
+                        Average LEI
+
+                    </th>
+
+                    <th>
+
+                        Status
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${tableRows}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+`;
+
+}

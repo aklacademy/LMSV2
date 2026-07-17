@@ -1139,6 +1139,108 @@ function getAssessmentSetsByListId(
 
 }
 
+
+
+/*======================================
+    Get Question Count By Content Id
+========================================*/
+
+function getQuestionCountByContentId(
+    contentId
+) {
+
+    return getQuestionsByContentId(
+        contentId
+    ).length;
+
+}
+
+
+/*======================================
+    Get Average Expected Response Time
+    By Content Id
+========================================*/
+
+function getAverageExpectedResponseTimeByContentId(
+    contentId
+) {
+
+    const questions =
+        getQuestionsByContentId(
+            contentId
+        );
+
+    if (
+        questions.length === 0
+    ) {
+
+        return 0;
+
+    }
+
+    const totalTime =
+        questions.reduce(
+            function(
+                total,
+                question
+            ) {
+
+                return (
+
+                    total
+
+                    +
+
+                    question.expectedResponseTime
+
+                );
+
+            },
+            0
+        );
+
+    return Math.round(
+
+        totalTime
+
+        /
+
+        questions.length
+
+    );
+
+}
+
+/*======================================
+    Get Content Analytics
+========================================*/
+
+function getContentAnalytics(
+    contentId
+) {
+
+    return {
+
+        contentId:
+
+            contentId,
+
+        questionCount:
+
+            getQuestionCountByContentId(
+                contentId
+            ),
+
+        averageExpectedResponseTime:
+
+            getAverageExpectedResponseTimeByContentId(
+                contentId
+            )
+
+    };
+
+}
+
 /*======================================
     Get Mastered Sets By List Id
 ========================================*/

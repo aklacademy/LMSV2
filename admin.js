@@ -3979,6 +3979,30 @@ if (
 
 }
 
+const expectedResponseTime =
+
+    Number(
+        row.Expected_Response_Time
+    );
+
+if (
+
+    isNaN(
+        expectedResponseTime
+    )
+
+    ||
+
+    expectedResponseTime <= 0
+
+) {
+
+    invalidCount++;
+
+    return;
+
+}
+
 
 const options = [
 
@@ -4155,14 +4179,19 @@ bloomLevel:
     row.Bloom_Level
         ?.trim(),
 
+
 difficultyLevel:
 
     row.Difficulty_Level
         ?.trim(),
 
+expectedResponseTime:
+
+    expectedResponseTime,
+
 status:
 
-    row.Status
+    row.Status 
         ?.trim()
         .toLowerCase(),
 
@@ -10364,12 +10393,6 @@ if (
             currentAdministratorEditing
 
         );
-
-console.log(
-        existingAdministrator
-    );
-
-
 }
 
 }

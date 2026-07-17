@@ -1406,19 +1406,6 @@ function performanceCalculateFTY(
 
 }
 
-function performanceCalculateCorrect() {
-
-}
-
-function performanceCalculateClose() {
-
-}
-
-function performanceCalculateIrrelevant() {
-
-}
-
-
 /*=================================
     QUESTION PERFORMANCE HELPERS
 ===================================*/
@@ -1626,7 +1613,13 @@ attemptHistory.forEach(
         attempt.setName,
 
     isCorrect:
-        attempt.isCorrect
+        attempt.isCorrect,
+
+    responseTime:
+        attempt.responseTime,
+
+    expectedResponseTime:
+        attempt.expectedResponseTime
 
 };
 
@@ -1635,6 +1628,78 @@ attemptHistory.forEach(
 );
 
 return questionSummary;
+
+}
+
+
+/*=================================
+    QUESTION MASTERY SUMMARY
+===================================*/
+
+function performanceBuildQuestionMasterySummary(
+
+    learnerId
+
+) {
+
+    
+    console.log(
+        "Building Question Mastery Summary..."
+    );
+
+
+    const attemptLog =
+
+        performanceGetAttemptLog(
+
+            learnerId
+
+        );
+
+    const questionMasterySummary = {};
+
+    attemptLog.forEach(
+
+    function(attempt) {
+
+        if (
+
+            !questionMasterySummary[
+                attempt.questionId
+            ]
+
+        ) {
+
+            questionMasterySummary[
+                attempt.questionId
+            ] = {
+
+                questionId:
+                    attempt.questionId,
+
+                contentId:
+                    attempt.contentId,
+
+                attempts: 0
+
+            };
+
+        }
+
+        questionMasterySummary[
+            attempt.questionId
+        ].attempts++;
+
+    }
+
+);
+
+console.log(
+    questionMasterySummary
+);
+
+return questionMasterySummary;
+
 
 }
 
@@ -6007,6 +6072,75 @@ function curriculumGetQuestionOpportunities() {
 
     return (
         questionOpportunities
+    );
+
+}
+
+
+/*======================================
+    CONTENT ANALYTICS
+========================================*/
+
+/*======================================
+    Get Content Analytics
+========================================*/
+
+function getContentAnalytics(
+    contentId
+) {
+
+    const content =
+        getContentById(
+            contentId
+        );
+
+    const questions =
+        getQuestionsByContentId(
+            contentId
+        );
+
+    return {
+
+        content:
+
+            content,
+
+        questions:
+
+            questions,
+
+        questionCount:
+
+            questions.length,
+
+        averageExpectedResponseTime:
+
+            getAverageExpectedResponseTimeByContentId(
+                contentId
+            )
+
+    };
+
+}
+
+
+/*======================================
+    Get Questions By Content Id
+========================================*/
+
+function getQuestionsByContentId(
+    contentId
+) {
+
+    return getAssessmentQuestions().filter(
+        function(question) {
+
+            return (
+                question.contentId ===
+                contentId
+            );
+
+        }
     );
 
 }

@@ -42,6 +42,8 @@ function initializeListProgress(
 
             attemptHistory: [],
 
+            attemptLog: [],
+
             mastered: false,
 
             masteredAssessmentCompleted: false
@@ -52,16 +54,40 @@ function initializeListProgress(
 
 
     const progress =
-        learnerData.lists[listName];
+    learnerData.lists[listName];
 
-    progress.attemptedMasteredSets =
+progress.completedLevels =
+    progress.completedLevels || [];
+
+progress.completedSets =
+    progress.completedSets || [];
+
+progress.attemptedMasteredSets =
     progress.attemptedMasteredSets || [];
 
-    progress.completedMasteredSets =
-        progress.completedMasteredSets || [];
+progress.completedMasteredSets =
+    progress.completedMasteredSets || [];
 
-    progress.masteredRevisionQuestions =
-        progress.masteredRevisionQuestions || [];
+progress.masteredRevisionQuestions =
+    progress.masteredRevisionQuestions || [];
+
+progress.revisionQuestions =
+    progress.revisionQuestions || [];
+
+progress.masteredQuestions =
+    progress.masteredQuestions || [];
+
+progress.attemptHistory =
+    progress.attemptHistory || [];
+
+progress.attemptLog =
+    progress.attemptLog || [];
+
+progress.mastered =
+    progress.mastered ?? false;
+
+progress.masteredAssessmentCompleted =
+    progress.masteredAssessmentCompleted ?? false;
 
 }
 
@@ -1718,6 +1744,7 @@ function showQuestion() {
 
             : "checkAnswer";
 
+
     questionContainer.innerHTML = `
     
         <div class="item-card">
@@ -1757,6 +1784,16 @@ function showQuestion() {
 
     `;
 
+    // Start timing AFTER the question is displayed
+
+    currentQuestionStartTime =
+        Date.now();
+
+currentQuestionStartTime =
+    Date.now();
+
+
+
 }
 
 
@@ -1764,6 +1801,17 @@ function checkAnswer(selectedOption) {
 
     const currentQuestion =
         currentQuestions[currentQuestionIndex];
+
+    const questionEndTime =
+    Date.now();
+
+const responseTime =
+
+    (
+        questionEndTime
+        -
+        currentQuestionStartTime
+    ) / 1000;
 
 
         initializeListProgress(currentList);
@@ -1826,9 +1874,34 @@ const attemptRecord = {
     attemptType:
         revisionMode
             ? "revision"
-            : "assessment"
+            : "assessment",
+
+    startTime:
+        currentQuestionStartTime,
+
+    endTime:
+        questionEndTime,
+
+    responseTime:
+        responseTime,
+
+    expectedResponseTime:
+        currentQuestion.expectedResponseTime,
+
+    answeredOn:
+        new Date().toISOString()
 
 };
+
+if (!currentListProgress.attemptLog) {
+
+    currentListProgress.attemptLog = [];
+
+}
+
+currentListProgress.attemptLog
+    .push(attemptRecord);
+
 
 const alreadyAttempted =
     currentListProgress.attemptHistory
