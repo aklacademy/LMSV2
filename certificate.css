@@ -1,0 +1,859 @@
+/*======================================
+    Google Fonts
+======================================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap');
+
+
+/*======================================
+    Reset
+======================================*/
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+
+/*======================================
+    Body
+======================================*/
+
+body{
+
+    background:#ececec;
+
+    font-family:'Poppins',sans-serif;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px;
+
+}
+
+
+/*======================================
+    Certificate
+======================================*/
+
+#certificate{
+
+    width:1400px;
+
+    min-height:990px;
+
+    background:white;
+
+    box-shadow:0 15px 45px rgba(0,0,0,.18);
+
+}
+
+
+
+
+/*======================================
+    Borders
+======================================*/
+
+.outer-border{
+
+    width:100%;
+
+    min-height:794px;
+
+    padding:18px;
+
+    border:10px solid #c9a13d;
+
+    background:white;
+
+}
+
+
+.inner-border{
+
+    position:relative;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    width:100%;
+
+    min-height:740px;
+
+    border:3px solid #220070;
+
+    padding:35px;
+
+}
+
+
+/*======================================
+    Decorative Corners
+======================================*/
+
+.inner-border::before,
+
+.inner-border::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:70px;
+
+    height:70px;
+
+    border:3px solid #79D8C5;
+
+}
+
+.inner-border::before{
+
+    top:12px;
+
+    left:12px;
+
+    border-right:none;
+
+    border-bottom:none;
+
+}
+
+.inner-border::after{
+
+    bottom:12px;
+
+    right:12px;
+
+    border-left:none;
+
+    border-top:none;
+
+}
+
+
+/*======================================
+    ISO Ribbon
+======================================*/
+
+#iso-ribbon{
+
+    position:absolute;
+
+    top:-3px;
+
+    right:40px;
+
+    width:70px;
+
+    height:150px;
+
+    background:#220070;
+
+}
+
+
+/*======================================
+    Ribbon Tail
+======================================*/
+
+#iso-ribbon::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:0;
+
+    height:0;
+
+    border-left:18px solid transparent;
+
+    border-right:18px solid transparent;
+
+    border-bottom:18px solid white;
+
+}
+
+
+/*======================================
+    Ribbon Content
+======================================*/
+
+.ribbon-content{
+
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:flex-start;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding-top:18px;
+
+    color:#FFFFFF;
+
+    font-family:'Poppins',sans-serif;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    letter-spacing:1px;
+
+    line-height:1.3;
+
+}
+
+.ribbon-content span{
+
+    display:block;
+
+    margin:8px 0;
+
+    font-size:11px;
+
+    font-weight:500;
+
+    color:#FFFFFF;
+
+}
+
+
+.ribbon-content small{
+
+    display:block;
+
+    margin-top:4px;
+
+    font-size:9px;
+
+    font-weight:600;
+
+    letter-spacing:1px;
+
+    color:#FFFFFF;
+
+}
+
+.ribbon-content h3{
+
+    margin:0 0 6px;
+
+    font-family:'Cinzel',serif;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    color:#FFFFFF;
+
+}
+
+/*======================================
+    Ribbon Top Accent
+======================================*/
+
+.ribbon-top{
+
+    width:100%;
+
+    height:6px;
+
+    background:#C9A13D;
+
+}
+/*======================================
+    Certificate Header
+======================================*/
+
+#certificate-header{
+
+    position:relative;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-top:20px;
+
+}
+
+#academy-brand{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:18px;
+
+}
+
+
+#academy-logo{
+
+    width:75px;
+
+    height:75px;
+
+    object-fit:contain;
+
+    flex-shrink:0;
+
+}
+
+
+
+
+/*======================================
+    Academy Name
+======================================*/
+
+#academy-text h1{
+
+    font-family:'Cinzel',serif;
+
+    color:#220070;
+
+    font-size:42px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+    margin:0;
+
+    line-height:1.1;
+
+}
+
+/*======================================
+    Academy Text
+======================================*/
+
+#academy-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    text-align:left;
+
+}
+
+/*======================================
+    Academy Tagline
+======================================*/
+
+#academy-text p{
+
+    margin-top:2px;
+
+    font-size:16px;
+
+    font-style:italic;
+
+    color:#555;
+
+    letter-spacing:.5px;
+
+    text-align: center;
+
+}
+
+/*======================================
+    Certificate Heading
+======================================*/
+
+#certificate-heading{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+
+/*======================================
+    Certificate
+======================================*/
+
+#certificate-heading h2{
+
+    margin:0;
+
+    font-family:'Cinzel',serif;
+
+    font-size:64px;
+
+    font-weight:700;
+
+    color:#220070;
+
+    letter-spacing:6px;
+
+    line-height:1;
+
+}
+
+/*======================================
+    Completion
+======================================*/
+
+#certificate-heading p{
+
+    margin-top:10px;
+
+    font-family:'Poppins',sans-serif;
+
+    font-size:22px;
+
+    font-weight:600;
+
+    color:#0c8a8a;
+
+    letter-spacing:5px;
+
+}
+
+
+.certificate-divider{
+
+    margin-top:12px;
+
+    color:#c9a13d;
+
+    font-size:18px;
+
+    letter-spacing:20px;
+
+}
+
+/*======================================
+    Certificate Title
+======================================*/
+
+#certificate-title{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:40px;
+
+    margin:50px 0;
+
+}
+
+
+/*======================================
+    Decorative Lines
+======================================*/
+
+.title-line{
+
+    flex:1;
+
+    height:2px;
+
+    background:#c9a13d;
+
+}
+
+
+
+/*======================================
+    Certificate Body
+======================================*/
+
+#certificate-body{
+
+    text-align:center;
+
+    margin-top:10px;
+
+    padding:0 70px;
+
+}
+
+
+/*======================================
+    Small Text
+======================================*/
+
+.small-text{
+
+    color: #666666;
+
+    font-size:18px;
+
+    font-weight:500;
+
+    letter-spacing:1px;
+
+    margin-bottom:16px;
+
+}
+
+
+/*======================================
+    Learner Name
+======================================*/
+
+#learner-name{
+
+    font-family:'Great Vibes',cursive;
+
+    font-size:92px;
+
+    line-height:1;
+
+    color:#220070;
+
+    font-weight:400;
+
+    margin-top:20px;
+
+    margin-bottom:35px;
+
+}
+
+
+/*======================================
+    Course Name
+======================================*/
+
+#course-name{
+
+    font-family:'Cinzel',serif;
+
+    color:#220070;
+
+    font-size:32px;
+
+    font-weight:600;
+
+    letter-spacing:.5px;
+
+    line-height:1.3;
+
+    text-align:center;
+
+    margin-top:20px;
+
+    margin-bottom:30px;
+
+}
+
+
+/*======================================
+    Description
+======================================*/
+
+/*======================================
+    Description
+======================================*/
+
+#description{
+
+    width:72%;
+
+    margin:0 auto 30px;
+
+    color:#666666;
+
+    font-size:17px;
+
+    line-height:1.8;
+
+    font-weight:400;
+
+    text-align:center;
+
+}
+
+
+/*======================================
+    Information Cards
+======================================*/
+
+#certificate-details{
+
+    margin-top:15px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:18px;
+
+}
+
+
+/*======================================
+    Card
+======================================*/
+
+.detail-card{
+
+    flex:1;
+
+    background:#fafafa;
+
+    border:2px solid #79D8C5;
+
+    border-radius:10px;
+
+    padding:22px;
+
+    text-align:center;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+
+/*======================================
+    Labels
+======================================*/
+
+.label{
+
+    display:block;
+
+    color:#220070;
+
+    font-weight:700;
+
+    font-size:13px;
+
+    letter-spacing:1px;
+
+    margin-bottom:8px;
+
+}
+
+
+/*======================================
+    Values
+======================================*/
+
+.value{
+
+    color:#555;
+
+    font-size:15px;
+
+}
+
+
+/*======================================
+    Footer Area
+======================================*/
+
+#certificate-footer{
+
+    margin-top:55px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-end;
+
+}
+
+
+/*======================================
+    Signature
+======================================*/
+
+.signature-block{
+
+    width:180px;
+
+    text-align:center;
+
+}
+
+
+/*======================================
+    Signature Line
+======================================*/
+
+.signature-line{
+
+    width:90px;
+
+    height:0;
+
+    margin:0 auto 10px;
+
+    border-top:2px solid #220070;
+
+}
+
+
+/*======================================
+    Signature Text
+======================================*/
+
+.signature-block h4{
+
+    color:#220070;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+
+/*======================================
+    Academy Seal
+======================================*/
+
+/*======================================
+    Academy Seal
+======================================*/
+
+#seal{
+
+    width:110px;
+
+    height:110px;
+
+    border:3px solid #C9A13D;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    font-family:'Cinzel',serif;
+
+    font-size:13px;
+
+    color:#C9A13D;
+
+    font-weight:600;
+
+    line-height:1.3;
+
+}
+
+
+/*======================================
+    QR Code
+======================================*/
+
+#qr-code{
+
+    width:90px;
+
+    height:90px;
+
+    border:2px dashed #AAAAAA;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-family:'Poppins',sans-serif;
+
+    font-size:11px;
+
+    color:#888;
+
+}
+
+
+/*======================================
+    Footer
+======================================*/
+
+footer{
+
+    margin-top:55px;
+
+    text-align:center;
+
+    color:#777;
+
+    font-size:14px;
+
+    line-height:1.8;
+
+}
+
+
+/*======================================
+    Print
+======================================*/
+
+@page{
+
+    size:A4 landscape;
+
+    margin:0;
+
+}
+
+@media print{
+
+    body{
+
+        background:white;
+
+        padding:0;
+
+    }
+
+    #certificate{
+
+        box-shadow:none;
+
+    }
+
+}
